@@ -3,10 +3,10 @@ package robot_maintenance
 import (
 	"embed"
 	"github.com/steadybit/advice-kit/go/advice_kit_api"
+	"github.com/steadybit/extension-appdynamics/extadvice/advice_common"
+	"github.com/steadybit/extension-appdynamics/extrobots"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
-	"github.com/steadybit/extension-scaffold/extadvice/advice_common"
-	"github.com/steadybit/extension-scaffold/extrobots"
 )
 
 const RobotMaintenanceID = "com.steadybit.extension_scaffold.advice.robot-maintenance"

@@ -1,4 +1,4 @@
-module github.com/steadybit/extension-scaffold
+module github.com/steadybit/extension-appdynamics
 
 go 1.24
 
