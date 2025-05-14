@@ -19,52 +19,52 @@ import (
 	"time"
 )
 
-type applicationDiscovery struct {
+type healthRuleDiscovery struct {
 }
 
 const (
-	appAttribute = "appdynamics.application"
+	healthRuleAttribute = "appdynamics.health_rule"
 )
 
 var (
-	_ discovery_kit_sdk.TargetDescriber    = (*applicationDiscovery)(nil)
-	_ discovery_kit_sdk.AttributeDescriber = (*applicationDiscovery)(nil)
+	_ discovery_kit_sdk.TargetDescriber    = (*healthRuleDiscovery)(nil)
+	_ discovery_kit_sdk.AttributeDescriber = (*healthRuleDiscovery)(nil)
 )
 
-func NewApplicationDiscovery() discovery_kit_sdk.TargetDiscovery {
-	discovery := &applicationDiscovery{}
+func NewhealthRuleDiscovery() discovery_kit_sdk.TargetDiscovery {
+	discovery := &healthRuleDiscovery{}
 	return discovery_kit_sdk.NewCachedTargetDiscovery(discovery,
 		discovery_kit_sdk.WithRefreshTargetsNow(),
 		discovery_kit_sdk.WithRefreshTargetsInterval(context.Background(), 1*time.Minute),
 	)
 }
 
-func (d *applicationDiscovery) Describe() discovery_kit_api.DiscoveryDescription {
+func (d *healthRuleDiscovery) Describe() discovery_kit_api.DiscoveryDescription {
 	return discovery_kit_api.DiscoveryDescription{
-		Id: applicationTargetType,
+		Id: applicationHealthRuleTargetType,
 		Discover: discovery_kit_api.DescribingEndpointReferenceWithCallInterval{
 			CallInterval: extutil.Ptr("1m"),
 		},
 	}
 }
 
-func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescription {
+func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescription {
 	return discovery_kit_api.TargetDescription{
-		Id:       applicationTargetType,
-		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics application", Other: "AppDynamics applications"},
+		Id:       applicationHealthRuleTargetType,
+		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics health-rule", Other: "AppDynamics health-rules"},
 		Category: extutil.Ptr("monitoring"),
 		Version:  extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:     extutil.Ptr(applicationTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
-				{Attribute: appAttribute + ".name"},
-				{Attribute: appAttribute + ".id"},
-				{Attribute: appAttribute + ".description"},
-				{Attribute: appAttribute + ".account_guid"},
+				{Attribute: healthRuleAttribute + ".name"},
+				{Attribute: healthRuleAttribute + ".id"},
+				{Attribute: healthRuleAttribute + ".description"},
+				{Attribute: healthRuleAttribute + ".account_guid"},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
-					Attribute: appAttribute + ".name",
+					Attribute: healthRuleAttribute + ".name",
 					Direction: "ASC",
 				},
 			},
@@ -72,28 +72,28 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 	}
 }
 
-func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.AttributeDescription {
+func (d *healthRuleDiscovery) DescribeAttributes() []discovery_kit_api.AttributeDescription {
 	return []discovery_kit_api.AttributeDescription{
 		{
-			Attribute: appAttribute + ".name",
+			Attribute: healthRuleAttribute + ".name",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Application",
 				Other: "Applications",
 			},
 		}, {
-			Attribute: appAttribute + ".id",
+			Attribute: healthRuleAttribute + ".id",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "ID",
 				Other: "IDs",
 			},
 		}, {
-			Attribute: appAttribute + ".description",
+			Attribute: healthRuleAttribute + ".description",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Descriptions",
 				Other: "Descriptions",
 			},
 		}, {
-			Attribute: appAttribute + ".account_guid",
+			Attribute: healthRuleAttribute + ".account_guid",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Account GUID",
 				Other: "Account GUIDs",
@@ -102,11 +102,11 @@ func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.Attribut
 	}
 }
 
-func (d *applicationDiscovery) DiscoverTargets(ctx context.Context) ([]discovery_kit_api.Target, error) {
+func (d *healthRuleDiscovery) DiscoverTargets(ctx context.Context) ([]discovery_kit_api.Target, error) {
 	return getAllApplications(ctx, RestyClient), nil
 }
 
-func getAllApplications(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
+func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
 	var appDynamicsResponse []Application
 	result := make([]discovery_kit_api.Target, 0, 1000)
 	res, err := client.R().
@@ -133,10 +133,10 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 			TargetType: applicationTargetType,
 			Label:      app.Name,
 			Attributes: map[string][]string{
-				appAttribute + ".description":  {app.Description},
-				appAttribute + ".name":         {app.Name},
-				appAttribute + ".id":           {strconv.Itoa(app.ID)},
-				appAttribute + ".account_guid": {app.AccountGUID},
+				healthRuleAttribute + ".description":  {app.Description},
+				healthRuleAttribute + ".name":         {app.Name},
+				healthRuleAttribute + ".id":           {strconv.Itoa(app.ID)},
+				healthRuleAttribute + ".account_guid": {app.AccountGUID},
 			}})
 	}
 
