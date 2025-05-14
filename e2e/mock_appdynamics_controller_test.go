@@ -35,7 +35,8 @@ func createMockAppDynamicsController() *mockServer {
 
 	mock := &mockServer{http: &server, state: "CLEAR"}
 	mux.Handle("/controller/rest/applications?output=JSON", handler(mock.viewApplications))
-	mux.Handle("GET /controller/alerting/rest/v1/applications/158456/health-rules?output=JSON", handler(mock.viewHealthRules))
+	mux.Handle("GET /controller/alerting/rest/v1/applications/1/health-rules?output=JSON", handler(mock.viewHealthRules))
+	mux.Handle("GET /controller/alerting/rest/v1/applications/2/health-rules?output=JSON", handler(mock.viewHealthRules))
 	return mock
 }
 
