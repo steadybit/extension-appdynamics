@@ -117,7 +117,6 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 	res, err := client.R().
 		SetContext(ctx).
 		SetResult(&applications).
-		SetHeader("Accept", "application/json").
 		Get("/controller/rest/applications?output=JSON")
 
 	if err != nil {

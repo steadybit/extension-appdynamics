@@ -34,9 +34,9 @@ func createMockAppDynamicsController() *mockServer {
 	log.Info().Str("url", server.URL).Msg("Started Mock-Server")
 
 	mock := &mockServer{http: &server, state: "CLEAR"}
-	mux.Handle("/controller/rest/applications?output=JSON", handler(mock.viewApplications))
-	mux.Handle("GET /controller/alerting/rest/v1/applications/1/health-rules?output=JSON", handler(mock.viewHealthRules))
-	mux.Handle("GET /controller/alerting/rest/v1/applications/2/health-rules?output=JSON", handler(mock.viewHealthRules))
+	mux.Handle("/controller/rest/applications", handler(mock.viewApplications))
+	mux.Handle("/controller/alerting/rest/v1/applications/1/health-rules?output=JSON", handler(mock.viewHealthRules))
+	mux.Handle("/controller/alerting/rest/v1/applications/2/health-rules?output=JSON", handler(mock.viewHealthRules))
 	return mock
 }
 
@@ -48,8 +48,7 @@ func (m *mockServer) viewApplications() []extappdynamics.Application {
 	if m.state == "STATUS-500" {
 		panic("status 500")
 	}
-
-	return []extappdynamics.Application{{ID: 1, Name: "test", Description: "", AccountGUID: "test"}, {ID: 2, Name: "test2", Description: "", AccountGUID: "test"}}
+	return []extappdynamics.Application{{ID: 1, Name: "test", Description: "test", AccountGUID: "test"}, {ID: 2, Name: "test2", Description: "test", AccountGUID: "test"}}
 }
 
 func (m *mockServer) viewHealthRules() []extappdynamics.HealthRule {

@@ -16,7 +16,7 @@ import (
 // through environment variables. Learn more through the documentation of the envconfig package.
 // https://github.com/kelseyhightower/envconfig
 type Specification struct {
-	AccessToken                             string   `json:"serviceToken" split_words:"true" required:"true"`
+	AccessToken                             string   `json:"accessToken" split_words:"true" required:"true"`
 	ApiBaseUrl                              string   `json:"apiBaseUrl" split_words:"true" required:"true"`
 	DiscoveryAttributesExcludesApplications []string `json:"discoveryAttributesExcludesApplications" split_words:"true" required:"false"`
 }
