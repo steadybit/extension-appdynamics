@@ -41,6 +41,7 @@ func main() {
 	exthttp.RegisterHttpHandler("/", exthttp.GetterAsHandler(getExtensionList))
 
 	discovery_kit_sdk.Register(extappdynamics.NewApplicationDiscovery())
+	discovery_kit_sdk.Register(extappdynamics.NewhealthRuleDiscovery())
 
 	extsignals.ActivateSignalHandlers()
 

@@ -13,3 +13,10 @@ type Application struct {
 	Description string `json:"description"`
 	AccountGUID string `json:"accountGuid"`
 }
+
+type HealthRule struct {
+	ID                 int    `json:"id"`
+	Name               string `json:"name"`
+	Enabled            bool   `json:"enabled"`
+	AffectedEntityType string `json:"affectedEntityType"`
+}

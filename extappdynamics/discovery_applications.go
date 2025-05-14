@@ -23,7 +23,9 @@ type applicationDiscovery struct {
 }
 
 const (
-	appAttribute = "appdynamics.application"
+	appAttribute   = "appdynamics.application"
+	appAccountGUID = ".account_guid"
+	appDescription = ".description"
 )
 
 var (
@@ -54,13 +56,13 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics application", Other: "AppDynamics applications"},
 		Category: extutil.Ptr("monitoring"),
 		Version:  extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:     extutil.Ptr(applicationTargetIcon),
+		Icon:     extutil.Ptr(appDynamicsTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
 				{Attribute: appAttribute + ".name"},
 				{Attribute: appAttribute + ".id"},
-				{Attribute: appAttribute + ".description"},
-				{Attribute: appAttribute + ".account_guid"},
+				{Attribute: appAttribute + appDescription},
+				{Attribute: appAttribute + appAccountGUID},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
@@ -87,7 +89,7 @@ func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.Attribut
 				Other: "IDs",
 			},
 		}, {
-			Attribute: appAttribute + ".description",
+			Attribute: appAttribute + appDescription,
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Descriptions",
 				Other: "Descriptions",
@@ -107,11 +109,11 @@ func (d *applicationDiscovery) DiscoverTargets(ctx context.Context) ([]discovery
 }
 
 func getAllApplications(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
-	var appDynamicsResponse []Application
+	var applications []Application
 	result := make([]discovery_kit_api.Target, 0, 1000)
 	res, err := client.R().
 		SetContext(ctx).
-		SetResult(&appDynamicsResponse).
+		SetResult(&applications).
 		Get("/controller/rest/applications?output=JSON")
 
 	if err != nil {
@@ -124,19 +126,19 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 			res.StatusCode(),
 			res.String())
 	} else {
-		log.Trace().Msgf("AppDynamics response: %v", appDynamicsResponse)
+		log.Trace().Msgf("AppDynamics response: %v", applications)
 	}
 
-	for _, app := range appDynamicsResponse {
+	for _, app := range applications {
 		result = append(result, discovery_kit_api.Target{
 			Id:         strconv.Itoa(app.ID),
 			TargetType: applicationTargetType,
 			Label:      app.Name,
 			Attributes: map[string][]string{
-				appAttribute + ".description":  {app.Description},
-				appAttribute + ".name":         {app.Name},
-				appAttribute + ".id":           {strconv.Itoa(app.ID)},
-				appAttribute + ".account_guid": {app.AccountGUID},
+				appAttribute + appDescription: {app.Description},
+				appAttribute + ".name":        {app.Name},
+				appAttribute + ".id":          {strconv.Itoa(app.ID)},
+				appAttribute + appAccountGUID: {app.AccountGUID},
 			}})
 	}
 
