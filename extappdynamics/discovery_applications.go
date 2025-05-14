@@ -109,11 +109,15 @@ func (d *applicationDiscovery) DiscoverTargets(ctx context.Context) ([]discovery
 }
 
 func getAllApplications(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
-	var applications []Application
+	if client == nil {
+		log.Error().Msg("Client is nil.")
+	}
+	applications := []Application{}
 	result := make([]discovery_kit_api.Target, 0, 1000)
 	res, err := client.R().
 		SetContext(ctx).
 		SetResult(&applications).
+		SetHeader("Accept", "application/json").
 		Get("/controller/rest/applications?output=JSON")
 
 	if err != nil {
