@@ -28,17 +28,23 @@ manifest should match snapshot using podAnnotations and Labels:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -48,7 +54,7 @@ manifest should match snapshot using podAnnotations and Labels:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -101,21 +107,23 @@ manifest should match snapshot with TLS:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
-                  value: /etc/extension/certificates/server-cert/tls.crt
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
-                  value: /etc/extension/certificates/server-cert/tls.key
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -125,7 +133,7 @@ manifest should match snapshot with TLS:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -185,12 +193,16 @@ manifest should match snapshot with extra env vars:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
-                - name: FOO
-                  value: bar
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               envFrom:
                 - configMapRef: null
                   name: env-configmap
@@ -202,7 +214,7 @@ manifest should match snapshot with extra env vars:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -212,7 +224,7 @@ manifest should match snapshot with extra env vars:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -267,17 +279,23 @@ manifest should match snapshot with extra labels:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -287,7 +305,7 @@ manifest should match snapshot with extra labels:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -340,23 +358,23 @@ manifest should match snapshot with mutual TLS:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
-                  value: /etc/extension/certificates/server-cert/tls.crt
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
-                  value: /etc/extension/certificates/server-cert/tls.key
-                - name: STEADYBIT_EXTENSION_TLS_CLIENT_CAS
-                  value: /etc/extension/certificates/client-cert-a/tls.crt,/etc/extension/certificates/client-cert-a/tls.crt
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -366,7 +384,7 @@ manifest should match snapshot with mutual TLS:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -433,23 +451,23 @@ manifest should match snapshot with mutual TLS using containerPaths:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
-                  value: /etc/tls/server.crt
-                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
-                  value: /etc/tls/server.key
-                - name: STEADYBIT_EXTENSION_TLS_CLIENT_CAS
-                  value: /etc/tls/ca.crt,/etc/tls/ca2.crt
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -459,7 +477,7 @@ manifest should match snapshot with mutual TLS using containerPaths:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -512,17 +530,23 @@ manifest should match snapshot with podSecurityContext:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -532,7 +556,7 @@ manifest should match snapshot with podSecurityContext:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -586,17 +610,23 @@ manifest should match snapshot with priority class:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -606,7 +636,7 @@ manifest should match snapshot with priority class:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -660,17 +690,23 @@ manifest should match snapshot without TLS:
         spec:
           containers:
             - env:
-                - name: STEADYBIT_LOG_LEVEL
-                  value: INFO
-                - name: STEADYBIT_LOG_FORMAT
-                  value: text
+                - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: accessToken
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
                 httpGet:
                   path: /health/liveness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1
@@ -680,7 +716,7 @@ manifest should match snapshot without TLS:
                 failureThreshold: 3
                 httpGet:
                   path: /health/readiness
-                  port: 8081
+                  port: 8084
                 initialDelaySeconds: 10
                 periodSeconds: 10
                 successThreshold: 1

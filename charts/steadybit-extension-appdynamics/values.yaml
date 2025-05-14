@@ -1,6 +1,15 @@
 # Default values for steadybit-extension-appdynamics.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+appdynamics:
+  # appdynamics.accessToken -- The Access Token used to access the AppDynamics API.
+  accessToken: ""
+  # appdynamics.apiBaseUrl -- The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`
+  apiBaseUrl: ""
+  # appdynamics.existingSecret -- If defined, will skip secret creation and instead assume that the referenced secret contains the keys accessToken and apiBaseUrl.
+  existingSecret: null
+
+
 image:
   # image.name -- The container image to use for the Steadybit scaffold extension.
   name: ghcr.io/steadybit/extension-appdynamics
@@ -131,5 +140,6 @@ extraEnvFrom: []
 discovery:
   attributes:
     excludes:
-      # discovery.attributes.excludes.robot -- List of attributes to exclude from Robot discovery.
-      robot: []
+      # discovery.attributes.excludes.application -- List of attributes to exclude from Application discovery.
+      application: []
+      healthRule: []

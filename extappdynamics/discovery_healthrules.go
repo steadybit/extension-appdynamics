@@ -23,7 +23,7 @@ type healthRuleDiscovery struct {
 }
 
 const (
-	healthRuleAttribute = "appdynamics.health_rule"
+	healthRuleAttribute = "appdynamics.health-rule"
 	enabled             = ".enabled"
 	affectedEntityType  = ".affected_entity_type"
 )
