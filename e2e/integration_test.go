@@ -176,6 +176,7 @@ func testDiscovery(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {
 	_, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.application", func(target discovery_kit_api.Target) bool {
 		return e2e.HasAttribute(target, "appdynamics.application.id", "1")
 	})
+	require.NoError(t, err)
 	_, err = e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.health-rule", func(target discovery_kit_api.Target) bool {
 		return e2e.HasAttribute(target, "appdynamics.health-rule.id", "1")
 	})
