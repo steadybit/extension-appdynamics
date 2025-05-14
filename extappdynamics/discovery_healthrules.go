@@ -125,7 +125,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 	}
 
 	if res.StatusCode() != 200 {
-		log.Warn().Msgf("AppDynamics API responded with unexpected status code %d while retrieving alert states. Full response: %v",
+		log.Warn().Msgf("AppDynamics API responded with unexpected status code %d while retrieving applications. Full response: %v",
 			res.StatusCode(),
 			res.String())
 	} else {
@@ -144,7 +144,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 		}
 
 		if res.StatusCode() != 200 {
-			log.Warn().Msgf("AppDynamics API responded with unexpected status code %d while retrieving alert states. Full response: %v",
+			log.Warn().Msgf("AppDynamics API responded with unexpected status code %d while retrieving health rules. Full response: %v",
 				res.StatusCode(),
 				res.String())
 		} else {
