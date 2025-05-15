@@ -52,7 +52,7 @@ func TestGetAllHealthRules_Success(t *testing.T) {
 	assert.Equal(t, "100", attrs[HealthRuleAttribute+".id"][0])
 	assert.Equal(t, "true", attrs[HealthRuleAttribute+AttributeEnabled][0])
 	assert.Equal(t, "APPLICATION", attrs[HealthRuleAttribute+AttributeAffectedEntityType][0])
-	assert.Equal(t, "42", attrs[HealthRuleAttribute+".application"][0])
+	assert.Equal(t, "42", attrs[HealthRuleAttribute+".application.id"][0])
 }
 
 // If the applications endpoint fails, we should get zero targets
