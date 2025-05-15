@@ -240,7 +240,7 @@ func toMetric(HealthRuleID string, HealthRuleName string, AppID string, hasViola
 	var tooltip string
 	var state string
 
-	tooltip = fmt.Sprintf("Health rule has violations: %s", hasViolations)
+	tooltip = fmt.Sprintf("Health rule has violations: %t", hasViolations)
 	if !hasViolations {
 		state = "success"
 	} else {
