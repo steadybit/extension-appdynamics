@@ -50,8 +50,8 @@ func TestGetAllHealthRules_Success(t *testing.T) {
 	attrs := hr.Attributes
 	assert.Equal(t, "Rule100", attrs[HealthRuleAttribute+".name"][0])
 	assert.Equal(t, "100", attrs[HealthRuleAttribute+".id"][0])
-	assert.Equal(t, "true", attrs[HealthRuleAttribute+enabled][0])
-	assert.Equal(t, "APPLICATION", attrs[HealthRuleAttribute+affectedEntityType][0])
+	assert.Equal(t, "true", attrs[HealthRuleAttribute+AttributeEnabled][0])
+	assert.Equal(t, "APPLICATION", attrs[HealthRuleAttribute+AttributeAffectedEntityType][0])
 	assert.Equal(t, "42", attrs[HealthRuleAttribute+".application"][0])
 }
 
@@ -102,8 +102,8 @@ func TestHealthRuleDiscovery_DescribeAttributes(t *testing.T) {
 	want := []string{
 		HealthRuleAttribute + ".name",
 		HealthRuleAttribute + ".id",
-		HealthRuleAttribute + enabled,
-		HealthRuleAttribute + affectedEntityType,
+		HealthRuleAttribute + AttributeEnabled,
+		HealthRuleAttribute + AttributeAffectedEntityType,
 	}
 	var got []string
 	for _, a := range attrs {
