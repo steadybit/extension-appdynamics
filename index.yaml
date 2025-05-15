@@ -1,0 +1,33 @@
+apiVersion: v1
+entries:
+  steadybit-extension-appdynamics:
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: 0.0.0
+    created: "2025-05-15T05:47:37.173655787Z"
+    dependencies:
+    - name: extensionlib
+      repository: https://steadybit.github.io/helm-charts
+      version: ^1.4.4
+    description: Steadybit scaffold extension Helm chart for Kubernetes.
+    digest: 63551f80671299aa313334031ef5c0f824de6b11095fc542cae4d13f83a2af21
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: daniel.reuter@steadybit.com
+      name: reuda
+    name: steadybit-extension-appdynamics
+    sources:
+    - https://github.com/steadybit/extension-appdynamics
+    urls:
+    - https://github.com/steadybit/extension-appdynamics/releases/download/steadybit-extension-appdynamics-1.0.32/steadybit-extension-appdynamics-1.0.32.tgz
+    version: 1.0.32
+generated: "2025-05-15T05:47:37.173661498Z"
