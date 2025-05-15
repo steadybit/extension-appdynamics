@@ -23,9 +23,9 @@ type healthRuleDiscovery struct {
 }
 
 const (
-	healthRuleAttribute = "appdynamics.health-rule"
-	enabled             = ".enabled"
-	affectedEntityType  = ".affected_entity_type"
+	HealthRuleAttribute         = "appdynamics.health-rule"
+	AttributeEnabled            = ".enabled"
+	AttributeAffectedEntityType = ".affected_entity_type"
 )
 
 var (
@@ -59,15 +59,15 @@ func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescripti
 		Icon:     extutil.Ptr(appDynamicsTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
-				{Attribute: healthRuleAttribute + ".name"},
-				{Attribute: healthRuleAttribute + ".id"},
-				{Attribute: healthRuleAttribute + enabled},
-				{Attribute: healthRuleAttribute + affectedEntityType},
-				{Attribute: healthRuleAttribute + ".application"},
+				{Attribute: HealthRuleAttribute + ".name"},
+				{Attribute: HealthRuleAttribute + ".id"},
+				{Attribute: HealthRuleAttribute + AttributeEnabled},
+				{Attribute: HealthRuleAttribute + AttributeAffectedEntityType},
+				{Attribute: HealthRuleAttribute + ".application"},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
-					Attribute: healthRuleAttribute + ".name",
+					Attribute: HealthRuleAttribute + ".name",
 					Direction: "ASC",
 				},
 			},
@@ -78,25 +78,25 @@ func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescripti
 func (d *healthRuleDiscovery) DescribeAttributes() []discovery_kit_api.AttributeDescription {
 	return []discovery_kit_api.AttributeDescription{
 		{
-			Attribute: healthRuleAttribute + ".name",
+			Attribute: HealthRuleAttribute + ".name",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Health rule",
 				Other: "Halth rules",
 			},
 		}, {
-			Attribute: healthRuleAttribute + ".id",
+			Attribute: HealthRuleAttribute + ".id",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "ID",
 				Other: "IDs",
 			},
 		}, {
-			Attribute: healthRuleAttribute + enabled,
+			Attribute: HealthRuleAttribute + AttributeEnabled,
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Status",
 				Other: "Status",
 			},
 		}, {
-			Attribute: healthRuleAttribute + affectedEntityType,
+			Attribute: HealthRuleAttribute + AttributeAffectedEntityType,
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Affected entity type",
 				Other: "Affected entity types",
@@ -156,11 +156,11 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 				TargetType: applicationHealthRuleTargetType,
 				Label:      healthRule.Name,
 				Attributes: map[string][]string{
-					healthRuleAttribute + ".name":            {healthRule.Name},
-					healthRuleAttribute + ".id":              {strconv.Itoa(healthRule.ID)},
-					healthRuleAttribute + enabled:            {strconv.FormatBool(healthRule.Enabled)},
-					healthRuleAttribute + affectedEntityType: {healthRule.AffectedEntityType},
-					healthRuleAttribute + ".application":     {strconv.Itoa(app.ID)},
+					HealthRuleAttribute + ".name":                     {healthRule.Name},
+					HealthRuleAttribute + ".id":                       {strconv.Itoa(healthRule.ID)},
+					HealthRuleAttribute + AttributeEnabled:            {strconv.FormatBool(healthRule.Enabled)},
+					HealthRuleAttribute + AttributeAffectedEntityType: {healthRule.AffectedEntityType},
+					HealthRuleAttribute + ".application":              {strconv.Itoa(app.ID)},
 				}})
 		}
 	}

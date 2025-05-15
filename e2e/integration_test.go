@@ -15,6 +15,7 @@ import (
 	actValidate "github.com/steadybit/action-kit/go/action_kit_test/validate"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_test/validate"
+	"github.com/steadybit/extension-appdynamics/extappdynamics"
 	"github.com/steadybit/extension-kit/extlogging"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -173,18 +174,22 @@ func testDiscovery(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
-	_, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.application", func(target discovery_kit_api.Target) bool {
+	app, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.application", func(target discovery_kit_api.Target) bool {
 		return e2e.HasAttribute(target, "appdynamics.application.id", "1")
 	})
 	require.NoError(t, err)
-	_, err = e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.health-rule", func(target discovery_kit_api.Target) bool {
+	healthrule, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.health-rule", func(target discovery_kit_api.Target) bool {
 		return e2e.HasAttribute(target, "appdynamics.health-rule.id", "1")
 	})
 	require.NoError(t, err)
-	//assert.Equal(t, target.TargetType, "com.steadybit.extension_grafana.alert-rule")
-	//assert.Equal(t, target.Attributes["grafana.alert-rule.type"], []string{"alerting"})
-	//assert.Equal(t, target.Attributes["grafana.alert-rule.datasource"], []string{"Prometheus"})
-	//assert.Equal(t, target.Attributes["grafana.alert-rule.name"], []string{"test_firing"})
+	assert.Equal(t, app.TargetType, "com.steadybit.extension_appdynamics.application")
+	assert.Equal(t, app.Attributes[extappdynamics.AppAttribute+".description"], []string{"test"})
+	assert.Equal(t, app.Attributes[extappdynamics.AppAttribute+extappdynamics.AppAccountGUID], []string{"test"})
+	assert.Equal(t, app.Attributes[extappdynamics.AppAttribute+".name"], []string{"test"})
+
+	assert.Equal(t, healthrule.TargetType, "com.steadybit.extension_appdynamics.health-rule")
+	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+extappdynamics.AttributeAffectedEntityType], []string{"Node"})
+	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+extappdynamics.AttributeEnabled], []string{"true"})
 }
 
 func validateActions(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {

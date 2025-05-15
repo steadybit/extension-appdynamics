@@ -55,11 +55,11 @@ func TestGetAllApplications_Success(t *testing.T) {
 		t.Errorf("expected Label=\"TestApp\", got %q", got.Label)
 	}
 	attrs := got.Attributes
-	if attrs[appAttribute+".description"][0] != "Test Desc" {
-		t.Errorf("expected description=\"Test Desc\", got %q", attrs[appAttribute+".description"][0])
+	if attrs[AppAttribute+".description"][0] != "Test Desc" {
+		t.Errorf("expected description=\"Test Desc\", got %q", attrs[AppAttribute+".description"][0])
 	}
-	if attrs[appAttribute+".account_guid"][0] != "GUID-123" {
-		t.Errorf("expected account_guid=\"GUID-123\", got %q", attrs[appAttribute+".account_guid"][0])
+	if attrs[AppAttribute+".account_guid"][0] != "GUID-123" {
+		t.Errorf("expected account_guid=\"GUID-123\", got %q", attrs[AppAttribute+".account_guid"][0])
 	}
 }
 
@@ -110,10 +110,10 @@ func TestApplicationDiscovery_DescribeAttributes(t *testing.T) {
 	var d applicationDiscovery
 	attrs := d.DescribeAttributes()
 	want := []string{
-		appAttribute + ".name",
-		appAttribute + ".id",
-		appAttribute + ".description",
-		appAttribute + ".account_guid",
+		AppAttribute + ".name",
+		AppAttribute + ".id",
+		AppAttribute + ".description",
+		AppAttribute + ".account_guid",
 	}
 	if len(attrs) != len(want) {
 		t.Fatalf("DescribeAttributes() len = %d; want %d", len(attrs), len(want))

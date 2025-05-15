@@ -48,11 +48,11 @@ func TestGetAllHealthRules_Success(t *testing.T) {
 	assert.Equal(t, "Rule100", hr.Label)
 
 	attrs := hr.Attributes
-	assert.Equal(t, "Rule100", attrs[healthRuleAttribute+".name"][0])
-	assert.Equal(t, "100", attrs[healthRuleAttribute+".id"][0])
-	assert.Equal(t, "true", attrs[healthRuleAttribute+enabled][0])
-	assert.Equal(t, "APPLICATION", attrs[healthRuleAttribute+affectedEntityType][0])
-	assert.Equal(t, "42", attrs[healthRuleAttribute+".application"][0])
+	assert.Equal(t, "Rule100", attrs[HealthRuleAttribute+".name"][0])
+	assert.Equal(t, "100", attrs[HealthRuleAttribute+".id"][0])
+	assert.Equal(t, "true", attrs[HealthRuleAttribute+enabled][0])
+	assert.Equal(t, "APPLICATION", attrs[HealthRuleAttribute+affectedEntityType][0])
+	assert.Equal(t, "42", attrs[HealthRuleAttribute+".application"][0])
 }
 
 // If the applications endpoint fails, we should get zero targets
@@ -91,7 +91,7 @@ func TestHealthRuleDiscovery_DescribeTarget(t *testing.T) {
 	// should list exactly 5 columns
 	assert.Len(t, td.Table.Columns, 5)
 	// first column should be the rule name
-	assert.Equal(t, healthRuleAttribute+".name", td.Table.Columns[0].Attribute)
+	assert.Equal(t, HealthRuleAttribute+".name", td.Table.Columns[0].Attribute)
 	assert.Equal(t, discovery_kit_api.OrderByDirection("ASC"), td.Table.OrderBy[0].Direction)
 }
 
@@ -100,10 +100,10 @@ func TestHealthRuleDiscovery_DescribeAttributes(t *testing.T) {
 	var d healthRuleDiscovery
 	attrs := d.DescribeAttributes()
 	want := []string{
-		healthRuleAttribute + ".name",
-		healthRuleAttribute + ".id",
-		healthRuleAttribute + enabled,
-		healthRuleAttribute + affectedEntityType,
+		HealthRuleAttribute + ".name",
+		HealthRuleAttribute + ".id",
+		HealthRuleAttribute + enabled,
+		HealthRuleAttribute + affectedEntityType,
 	}
 	var got []string
 	for _, a := range attrs {

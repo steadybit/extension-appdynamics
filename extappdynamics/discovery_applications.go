@@ -23,9 +23,9 @@ type applicationDiscovery struct {
 }
 
 const (
-	appAttribute   = "appdynamics.application"
-	appAccountGUID = ".account_guid"
-	appDescription = ".description"
+	AppAttribute   = "appdynamics.application"
+	AppAccountGUID = ".account_guid"
+	AppDescription = ".description"
 )
 
 var (
@@ -59,14 +59,14 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 		Icon:     extutil.Ptr(appDynamicsTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
-				{Attribute: appAttribute + ".name"},
-				{Attribute: appAttribute + ".id"},
-				{Attribute: appAttribute + appDescription},
-				{Attribute: appAttribute + appAccountGUID},
+				{Attribute: AppAttribute + ".name"},
+				{Attribute: AppAttribute + ".id"},
+				{Attribute: AppAttribute + AppDescription},
+				{Attribute: AppAttribute + AppAccountGUID},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
-					Attribute: appAttribute + ".name",
+					Attribute: AppAttribute + ".name",
 					Direction: "ASC",
 				},
 			},
@@ -77,25 +77,25 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.AttributeDescription {
 	return []discovery_kit_api.AttributeDescription{
 		{
-			Attribute: appAttribute + ".name",
+			Attribute: AppAttribute + ".name",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Application",
 				Other: "Applications",
 			},
 		}, {
-			Attribute: appAttribute + ".id",
+			Attribute: AppAttribute + ".id",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "ID",
 				Other: "IDs",
 			},
 		}, {
-			Attribute: appAttribute + appDescription,
+			Attribute: AppAttribute + AppDescription,
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Descriptions",
 				Other: "Descriptions",
 			},
 		}, {
-			Attribute: appAttribute + ".account_guid",
+			Attribute: AppAttribute + ".account_guid",
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Account GUID",
 				Other: "Account GUIDs",
@@ -138,10 +138,10 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 			TargetType: applicationTargetType,
 			Label:      app.Name,
 			Attributes: map[string][]string{
-				appAttribute + appDescription: {app.Description},
-				appAttribute + ".name":        {app.Name},
-				appAttribute + ".id":          {strconv.Itoa(app.ID)},
-				appAttribute + appAccountGUID: {app.AccountGUID},
+				AppAttribute + AppDescription: {app.Description},
+				AppAttribute + ".name":        {app.Name},
+				AppAttribute + ".id":          {strconv.Itoa(app.ID)},
+				AppAttribute + AppAccountGUID: {app.AccountGUID},
 			}})
 	}
 
