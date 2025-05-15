@@ -20,3 +20,23 @@ type HealthRule struct {
 	Enabled            bool   `json:"enabled"`
 	AffectedEntityType string `json:"affectedEntityType"`
 }
+
+type Violation struct {
+	DeepLinkURL          string    `json:"deepLinkUrl"`
+	Severity             string    `json:"severity"`
+	TriggeredEntity      EntityDef `json:"triggeredEntityDefinition"`
+	StartTimeInMillis    int64     `json:"startTimeInMillis"`
+	DetectedTimeInMillis int64     `json:"detectedTimeInMillis"`
+	EndTimeInMillis      int64     `json:"endTimeInMillis"`
+	Name                 string    `json:"name"`
+	Description          string    `json:"description"`
+	ID                   int64     `json:"id"`
+	AffectedEntity       EntityDef `json:"affectedEntityDefinition"`
+	IncidentStatus       string    `json:"incidentStatus"`
+}
+
+type EntityDef struct {
+	EntityType string `json:"entityType"`
+	Name       string `json:"name"`
+	EntityID   int64  `json:"entityId"`
+}

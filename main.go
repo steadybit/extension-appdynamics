@@ -42,6 +42,7 @@ func main() {
 
 	discovery_kit_sdk.Register(extappdynamics.NewApplicationDiscovery())
 	discovery_kit_sdk.Register(extappdynamics.NewhealthRuleDiscovery())
+	action_kit_sdk.RegisterAction(extappdynamics.NewHealthRuleStateCheckAction())
 
 	extsignals.ActivateSignalHandlers()
 

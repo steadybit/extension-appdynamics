@@ -160,7 +160,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 					HealthRuleAttribute + ".id":                       {strconv.Itoa(healthRule.ID)},
 					HealthRuleAttribute + AttributeEnabled:            {strconv.FormatBool(healthRule.Enabled)},
 					HealthRuleAttribute + AttributeAffectedEntityType: {healthRule.AffectedEntityType},
-					HealthRuleAttribute + ".application":              {strconv.Itoa(app.ID)},
+					HealthRuleAttribute + ".application.id":           {strconv.Itoa(app.ID)},
 				}})
 		}
 	}
