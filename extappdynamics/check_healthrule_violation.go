@@ -140,14 +140,15 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 }
 
 func (m *HealthRuleStateCheckAction) Prepare(_ context.Context, state *HealthRuleCheckState, request action_kit_api.PrepareActionRequestBody) (*action_kit_api.PrepareResult, error) {
-	HealthRuleId := request.Target.Attributes["appdynamics.health-rule.id"]
+	now := time.Now()
+	HealthRuleId := request.Target.Attributes[HealthRuleAttribute+".id"]
 	if len(HealthRuleId) == 0 {
 		return nil, extutil.Ptr(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.id' attribute.", nil))
 	}
 	state.HealthRuleId = HealthRuleId[0]
 
 	duration := request.Config["duration"].(float64)
-	end := time.Now().Add(time.Millisecond * time.Duration(duration))
+	end := now.Add(time.Millisecond * time.Duration(duration))
 
 	var expectedViolation bool
 	if request.Config["violation"] != nil {
@@ -180,9 +181,13 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	now := time.Now()
 	nowStr := strconv.FormatInt(now.UnixMilli(), 10) // base 10
 	endStr := strconv.FormatInt(state.End.UnixMilli(), 10)
-
+	completed := time.Now().After(state.End)
+	if completed {
+		nowStr = strconv.FormatInt(state.End.UnixMilli(), 10)
+	}
 	var violations []Violation
-	uri := "/controller/rest/applications/" + state.HealthRuleApplication + "/problems/healthrule-violation?output=JSON&time-range-type=BETWEEN_TIMES&start-time=" + nowStr + "&end-time=" + endStr
+
+	uri := "/controller/rest/applications/" + state.HealthRuleApplication + "/problems/healthrule-violations?output=JSON&time-range-type=BETWEEN_TIMES&start-time=" + nowStr + "&end-time=" + endStr
 	res, err := client.R().
 		SetContext(ctx).
 		SetResult(&violations).
@@ -196,7 +201,6 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 		log.Err(err).Msgf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String())
 	}
 
-	completed := now.After(state.End)
 	var checkError *action_kit_api.ActionKitError
 	healthRuleHasViolations := hasViolations(violations, state.HealthRuleName)
 
@@ -250,11 +254,11 @@ func toMetric(HealthRuleID string, HealthRuleName string, AppID string, hasViola
 	return extutil.Ptr(action_kit_api.Metric{
 		Name: extutil.Ptr("appdynamics_health_rule_state"),
 		Metric: map[string]string{
-			"appdynamics.health-rule.id":   HealthRuleID,
-			"appdynamics.health-rule.name": HealthRuleName,
-			"state":                        state,
-			"tooltip":                      tooltip,
-			"url":                          fmt.Sprintf("%s/controller/#/location=ALERT_RESPOND_HEALTH_RULES&timeRange=Custom_Time_Range.BETWEEN_TIMES.%d.%d.120&application=%s", config.Config.ApiBaseUrl, now.UnixMilli(), end.UnixMilli(), AppID),
+			HealthRuleAttribute + ".id":   HealthRuleID,
+			HealthRuleAttribute + ".name": HealthRuleName,
+			"state":                       state,
+			"tooltip":                     tooltip,
+			"url":                         fmt.Sprintf("%s/controller/#/location=ALERT_RESPOND_HEALTH_RULES&timeRange=Custom_Time_Range.BETWEEN_TIMES.%d.%d.120&application=%s", config.Config.ApiBaseUrl, now.UnixMilli(), end.UnixMilli(), AppID),
 		},
 		Timestamp: now,
 		Value:     0,
