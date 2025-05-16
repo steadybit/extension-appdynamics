@@ -92,7 +92,7 @@ func testHealthRuleCheck(hasViolation bool, appID string, wantedActionStatus act
 		if wantedActionStatus == "" {
 			require.NoError(t, err)
 		} else {
-			require.ErrorContains(t, err, fmt.Sprintf("%s", wantedActionStatus))
+			require.ErrorContains(t, err, string(wantedActionStatus))
 		}
 	}
 }
