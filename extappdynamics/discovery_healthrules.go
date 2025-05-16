@@ -26,6 +26,8 @@ const (
 	HealthRuleAttribute         = "appdynamics.health-rule"
 	AttributeEnabled            = ".enabled"
 	AttributeAffectedEntityType = ".affected_entity_type"
+	AttributeAppID              = ".application.id"
+	AttributeAppName            = ".application.name"
 )
 
 var (
@@ -63,7 +65,8 @@ func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescripti
 				{Attribute: HealthRuleAttribute + ".id"},
 				{Attribute: HealthRuleAttribute + AttributeEnabled},
 				{Attribute: HealthRuleAttribute + AttributeAffectedEntityType},
-				{Attribute: HealthRuleAttribute + ".application"},
+				{Attribute: HealthRuleAttribute + AttributeAppID},
+				{Attribute: HealthRuleAttribute + AttributeAppName},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
@@ -101,6 +104,18 @@ func (d *healthRuleDiscovery) DescribeAttributes() []discovery_kit_api.Attribute
 				One:   "Affected entity type",
 				Other: "Affected entity types",
 			},
+		}, {
+			Attribute: HealthRuleAttribute + AttributeAppID,
+			Label: discovery_kit_api.PluralLabel{
+				One:   "Health rule application id",
+				Other: "Health rule application ids",
+			},
+		}, {
+			Attribute: HealthRuleAttribute + AttributeAppName,
+			Label: discovery_kit_api.PluralLabel{
+				One:   "Health rule application name",
+				Other: "Health rule application names",
+			},
 		},
 	}
 }
@@ -111,7 +126,7 @@ func (d *healthRuleDiscovery) DiscoverTargets(ctx context.Context) ([]discovery_
 
 func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
 	var applications []Application
-	var healthrules []HealthRule
+	var healthRules []HealthRule
 
 	result := make([]discovery_kit_api.Target, 0, 1000)
 	res, err := client.R().
@@ -135,7 +150,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 	for _, app := range applications {
 		res, err := client.R().
 			SetContext(ctx).
-			SetResult(&healthrules).
+			SetResult(&healthRules).
 			Get("/controller/alerting/rest/v1/applications/" + strconv.Itoa(app.ID) + "/health-rules?output=JSON")
 
 		if err != nil {
@@ -150,7 +165,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 		} else {
 			log.Trace().Msgf("AppDynamics response: %v", applications)
 		}
-		for _, healthRule := range healthrules {
+		for _, healthRule := range healthRules {
 			result = append(result, discovery_kit_api.Target{
 				Id:         strconv.Itoa(app.ID) + "-" + strconv.Itoa(healthRule.ID),
 				TargetType: applicationHealthRuleTargetType,
@@ -160,7 +175,8 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 					HealthRuleAttribute + ".id":                       {strconv.Itoa(healthRule.ID)},
 					HealthRuleAttribute + AttributeEnabled:            {strconv.FormatBool(healthRule.Enabled)},
 					HealthRuleAttribute + AttributeAffectedEntityType: {healthRule.AffectedEntityType},
-					HealthRuleAttribute + ".application.id":           {strconv.Itoa(app.ID)},
+					HealthRuleAttribute + AttributeAppID:              {strconv.Itoa(app.ID)},
+					HealthRuleAttribute + AttributeAppName:            {app.Name},
 				}})
 		}
 	}

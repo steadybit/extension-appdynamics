@@ -16,11 +16,12 @@ func TestHasViolations(t *testing.T) {
 		{Name: "foo"},
 		{Name: "bar"},
 	}
-
-	if !hasViolations(violations, "foo") {
+	hasViolationsFoo, _ := hasViolations(violations, "foo")
+	hasViolationsBaz, _ := hasViolations(violations, "baz")
+	if !hasViolationsFoo {
 		t.Error(`expected hasViolations to return true for name "foo"`)
 	}
-	if hasViolations(violations, "baz") {
+	if hasViolationsBaz {
 		t.Error(`expected hasViolations to return false for name "baz"`)
 	}
 }

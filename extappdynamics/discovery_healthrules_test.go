@@ -52,7 +52,7 @@ func TestGetAllHealthRules_Success(t *testing.T) {
 	assert.Equal(t, "100", attrs[HealthRuleAttribute+".id"][0])
 	assert.Equal(t, "true", attrs[HealthRuleAttribute+AttributeEnabled][0])
 	assert.Equal(t, "APPLICATION", attrs[HealthRuleAttribute+AttributeAffectedEntityType][0])
-	assert.Equal(t, "42", attrs[HealthRuleAttribute+".application.id"][0])
+	assert.Equal(t, "42", attrs[HealthRuleAttribute+AttributeAppID][0])
 }
 
 // If the applications endpoint fails, we should get zero targets
@@ -89,7 +89,7 @@ func TestHealthRuleDiscovery_DescribeTarget(t *testing.T) {
 	assert.NotNil(t, td.Category)
 	assert.Equal(t, "monitoring", *td.Category)
 	// should list exactly 5 columns
-	assert.Len(t, td.Table.Columns, 5)
+	assert.Len(t, td.Table.Columns, 6)
 	// first column should be the rule name
 	assert.Equal(t, HealthRuleAttribute+".name", td.Table.Columns[0].Attribute)
 	assert.Equal(t, discovery_kit_api.OrderByDirection("ASC"), td.Table.OrderBy[0].Direction)
@@ -104,6 +104,8 @@ func TestHealthRuleDiscovery_DescribeAttributes(t *testing.T) {
 		HealthRuleAttribute + ".id",
 		HealthRuleAttribute + AttributeEnabled,
 		HealthRuleAttribute + AttributeAffectedEntityType,
+		HealthRuleAttribute + AttributeAppID,
+		HealthRuleAttribute + AttributeAppName,
 	}
 	var got []string
 	for _, a := range attrs {

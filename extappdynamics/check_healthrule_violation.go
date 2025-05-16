@@ -19,6 +19,7 @@ import (
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -81,11 +82,21 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 				Required:     extutil.Ptr(true),
 			},
 			{
-				Name:         "violation",
-				Label:        "Is Any Violations Expected?",
-				Description:  extutil.Ptr("Does the health rule will observe some violations of critical or warning conditions?"),
-				Type:         action_kit_api.ActionParameterTypeBoolean,
-				DefaultValue: extutil.Ptr("true"),
+				Name:        "violation",
+				Label:       "Expected State",
+				Description: extutil.Ptr("Does the health rule will observe some violations of critical or warning conditions?"),
+				Type:        action_kit_api.String,
+				Options: extutil.Ptr([]action_kit_api.ParameterOption{
+					action_kit_api.ExplicitParameterOption{
+						Label: "Violations expected",
+						Value: violationsExpected,
+					},
+					action_kit_api.ExplicitParameterOption{
+						Label: "No violations expected",
+						Value: noViolationsExpected,
+					},
+				}),
+				DefaultValue: extutil.Ptr(violationsExpected),
 				Required:     extutil.Ptr(true),
 				Order:        extutil.Ptr(2),
 			},
@@ -186,7 +197,6 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 		nowStr = strconv.FormatInt(state.End.UnixMilli(), 10)
 	}
 	var violations []Violation
-
 	uri := "/controller/rest/applications/" + state.HealthRuleApplication + "/problems/healthrule-violations?output=JSON&time-range-type=BETWEEN_TIMES&start-time=" + nowStr + "&end-time=" + endStr
 	res, err := client.R().
 		SetContext(ctx).
@@ -202,7 +212,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	}
 
 	var checkError *action_kit_api.ActionKitError
-	healthRuleHasViolations := hasViolations(violations, state.HealthRuleName)
+	healthRuleHasViolations, currentViolation := hasViolations(violations, state.HealthRuleName)
 
 	if state.StateCheckMode == StateCheckModeAllTheTime {
 		if !state.IsViolationExpected == healthRuleHasViolations {
@@ -230,7 +240,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	}
 
 	metrics := []action_kit_api.Metric{
-		*toMetric(state.HealthRuleId, state.HealthRuleName, state.HealthRuleApplication, healthRuleHasViolations, now, state.End),
+		*toMetric(state.HealthRuleId, state.HealthRuleName, state.HealthRuleApplication, currentViolation, healthRuleHasViolations, now),
 	}
 
 	return &action_kit_api.StatusResult{
@@ -240,7 +250,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	}, nil
 }
 
-func toMetric(HealthRuleID string, HealthRuleName string, AppID string, hasViolations bool, now time.Time, end time.Time) *action_kit_api.Metric {
+func toMetric(healthRuleID string, healthRuleName string, appID string, violation *Violation, hasViolations bool, now time.Time) *action_kit_api.Metric {
 	var tooltip string
 	var state string
 
@@ -251,25 +261,30 @@ func toMetric(HealthRuleID string, HealthRuleName string, AppID string, hasViola
 		state = "danger"
 	}
 
+	url := fmt.Sprintf("%s/controller/#/location=APP_DASHBOARD&timeRange=last_1_hour.BEFORE_NOW.-1.-1.60&application=%s&dashboardMode=force", strings.TrimRight(config.Config.ApiBaseUrl, "/"), appID)
+	if violation != nil {
+		url = fmt.Sprintf("%s/controller/#/location=APP_INCIDENT_DETAIL_MODAL&timeRange=last_1_hour.BEFORE_NOW.-1.-1.60&application=%s&incident=%d&incidentTime=%s", strings.TrimRight(config.Config.ApiBaseUrl, "/"), appID, violation.ID, strconv.FormatInt(now.UnixMilli(), 10))
+	}
+
 	return extutil.Ptr(action_kit_api.Metric{
 		Name: extutil.Ptr("appdynamics_health_rule_state"),
 		Metric: map[string]string{
-			HealthRuleAttribute + ".id":   HealthRuleID,
-			HealthRuleAttribute + ".name": HealthRuleName,
+			HealthRuleAttribute + ".id":   healthRuleID,
+			HealthRuleAttribute + ".name": healthRuleName,
 			"state":                       state,
 			"tooltip":                     tooltip,
-			"url":                         fmt.Sprintf("%s/controller/#/location=ALERT_RESPOND_HEALTH_RULES&timeRange=Custom_Time_Range.BETWEEN_TIMES.%d.%d.120&application=%s", config.Config.ApiBaseUrl, now.UnixMilli(), end.UnixMilli(), AppID),
+			"url":                         url,
 		},
 		Timestamp: now,
 		Value:     0,
 	})
 }
 
-func hasViolations(violations []Violation, healthRuleName string) bool {
+func hasViolations(violations []Violation, healthRuleName string) (bool, *Violation) {
 	for _, violation := range violations {
 		if violation.Name == healthRuleName {
-			return true
+			return true, &violation
 		}
 	}
-	return false
+	return false, nil
 }

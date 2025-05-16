@@ -23,6 +23,7 @@ import (
 	"github.com/steadybit/extension-kit/extsignals"
 	_ "go.uber.org/automaxprocs" // Importing automaxprocs automatically adjusts GOMAXPROCS.
 	_ "net/http/pprof"           //allow pprof
+	"strings"
 )
 
 func main() {
@@ -57,7 +58,7 @@ func main() {
 
 func initRestyClient() {
 	extappdynamics.RestyClient = resty.New()
-	extappdynamics.RestyClient.SetBaseURL(config.Config.ApiBaseUrl)
+	extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
 	extappdynamics.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
 	extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
 }
