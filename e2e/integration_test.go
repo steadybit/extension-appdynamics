@@ -72,9 +72,9 @@ func testHealthRuleCheck(hasViolation bool, appID string, wantedActionStatus act
 		target := &action_kit_api.Target{
 			Name: "dynamic_health_rule",
 			Attributes: map[string][]string{
-				extappdynamics.HealthRuleAttribute + ".application.id": {appID},
-				extappdynamics.HealthRuleAttribute + ".id":             {"1"},
-				extappdynamics.HealthRuleAttribute + ".name":           {"health rule name"},
+				extappdynamics.HealthRuleAttribute + extappdynamics.AttributeAppID: {appID},
+				extappdynamics.HealthRuleAttribute + ".id":                         {"1"},
+				extappdynamics.HealthRuleAttribute + ".name":                       {"health rule name"},
 			},
 		}
 
@@ -121,7 +121,7 @@ func testDiscovery(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {
 	assert.Equal(t, healthrule.TargetType, "com.steadybit.extension_appdynamics.health-rule")
 	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+extappdynamics.AttributeAffectedEntityType], []string{"Node"})
 	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+extappdynamics.AttributeEnabled], []string{"true"})
-	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+".application.id"], []string{"1"})
+	assert.Equal(t, healthrule.Attributes[extappdynamics.HealthRuleAttribute+extappdynamics.AttributeAppID], []string{"1"})
 }
 
 func validateActions(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {
