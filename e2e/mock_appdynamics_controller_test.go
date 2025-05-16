@@ -37,6 +37,8 @@ func createMockAppDynamicsController() *mockServer {
 	mux.Handle("/controller/rest/applications", handler(mock.viewApplications))
 	mux.Handle("/controller/alerting/rest/v1/applications/1/health-rules", handler(mock.viewHealthRules))
 	mux.Handle("/controller/alerting/rest/v1/applications/2/health-rules", handler(mock.viewHealthRulesForApp2))
+	mux.Handle("/controller/rest/applications/1/problems/healthrule-violations", handler(mock.viewHealthRuleViolationsForApp1))
+	mux.Handle("/controller/rest/applications/2/problems/healthrule-violations", handler(mock.viewHealthRuleViolationsForApp2))
 	return mock
 }
 
@@ -67,4 +69,24 @@ func (m *mockServer) viewHealthRulesForApp2() []extappdynamics.HealthRule {
 	return []extappdynamics.HealthRule{{
 		ID: 2, Name: "CPU", AffectedEntityType: "Node", Enabled: true,
 	}}
+}
+
+func (m *mockServer) viewHealthRuleViolationsForApp1() []extappdynamics.Violation {
+	if m.state == "STATUS-500" {
+		panic("status 500")
+	}
+	return []extappdynamics.Violation{
+		{
+			ID:          int64(32422),
+			Name:        "health rule name",
+			Description: "test",
+		},
+	}
+}
+
+func (m *mockServer) viewHealthRuleViolationsForApp2() []extappdynamics.Violation {
+	if m.state == "STATUS-500" {
+		panic("status 500")
+	}
+	return []extappdynamics.Violation{}
 }

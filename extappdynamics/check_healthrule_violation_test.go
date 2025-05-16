@@ -39,7 +39,7 @@ func TestHealthRuleCheckStatus_NoViolations_AllTheTime(t *testing.T) {
 		HealthRuleApplication: "app",
 		End:                   time.Now().Add(-time.Second),
 		IsViolationExpected:   false,
-		StateCheckMode:        stateCheckModeAllTheTime,
+		StateCheckMode:        StateCheckModeAllTheTime,
 	}
 
 	res, err := HealthRuleCheckStatus(context.Background(), &state, client)
@@ -74,7 +74,7 @@ func TestHealthRuleCheckStatus_ViolationsUnexpected_AllTheTime(t *testing.T) {
 		HealthRuleApplication: "app",
 		End:                   time.Now().Add(-time.Second),
 		IsViolationExpected:   false,
-		StateCheckMode:        stateCheckModeAllTheTime,
+		StateCheckMode:        StateCheckModeAllTheTime,
 	}
 
 	res, err := HealthRuleCheckStatus(context.Background(), &state, client)
@@ -100,7 +100,7 @@ func TestHealthRuleCheckStatus_AtLeastOnce_Success(t *testing.T) {
 		HealthRuleApplication: "app",
 		End:                   time.Now().Add(-time.Second),
 		IsViolationExpected:   false,
-		StateCheckMode:        stateCheckModeAtLeastOnce,
+		StateCheckMode:        StateCheckModeAtLeastOnce,
 	}
 
 	res, err := HealthRuleCheckStatus(context.Background(), &state, client)
@@ -129,7 +129,7 @@ func TestHealthRuleCheckStatus_AtLeastOnce_Failure(t *testing.T) {
 		HealthRuleApplication: "app",
 		End:                   time.Now().Add(-time.Second),
 		IsViolationExpected:   true,
-		StateCheckMode:        stateCheckModeAtLeastOnce,
+		StateCheckMode:        StateCheckModeAtLeastOnce,
 	}
 
 	res, err := HealthRuleCheckStatus(context.Background(), &state, client)

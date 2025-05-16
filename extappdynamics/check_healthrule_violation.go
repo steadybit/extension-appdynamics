@@ -94,15 +94,15 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 				Label:        "State Check Mode",
 				Description:  extutil.Ptr("How often should the state be checked ?"),
 				Type:         action_kit_api.String,
-				DefaultValue: extutil.Ptr(stateCheckModeAllTheTime),
+				DefaultValue: extutil.Ptr(StateCheckModeAllTheTime),
 				Options: extutil.Ptr([]action_kit_api.ParameterOption{
 					action_kit_api.ExplicitParameterOption{
 						Label: "All the time",
-						Value: stateCheckModeAllTheTime,
+						Value: StateCheckModeAllTheTime,
 					},
 					action_kit_api.ExplicitParameterOption{
 						Label: "At least once",
-						Value: stateCheckModeAtLeastOnce,
+						Value: StateCheckModeAtLeastOnce,
 					},
 				}),
 				Required: extutil.Ptr(true),
@@ -204,7 +204,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	var checkError *action_kit_api.ActionKitError
 	healthRuleHasViolations := hasViolations(violations, state.HealthRuleName)
 
-	if state.StateCheckMode == stateCheckModeAllTheTime {
+	if state.StateCheckMode == StateCheckModeAllTheTime {
 		if !state.IsViolationExpected == healthRuleHasViolations {
 			checkError = extutil.Ptr(action_kit_api.ActionKitError{
 				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected :%t'.",
@@ -214,7 +214,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 				Status: extutil.Ptr(action_kit_api.Failed),
 			})
 		}
-	} else if state.StateCheckMode == stateCheckModeAtLeastOnce {
+	} else if state.StateCheckMode == StateCheckModeAtLeastOnce {
 		if state.IsViolationExpected == healthRuleHasViolations {
 			state.StateCheckSuccess = true
 		}
