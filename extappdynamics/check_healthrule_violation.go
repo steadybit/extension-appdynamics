@@ -11,7 +11,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-resty/resty/v2"
-	"github.com/rs/zerolog/log"
 	"github.com/steadybit/action-kit/go/action_kit_api/v2"
 	"github.com/steadybit/action-kit/go/action_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
@@ -68,7 +67,7 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 			}),
 		}),
 		Technology:  extutil.Ptr("AppDynamics"),
-		Category:    extutil.Ptr("AppDynamics"), //Can be removed in Q1/24 - support for backward compatibility of old sidebar
+		Category:    extutil.Ptr("monitoring"), //Can be removed in Q1/24 - support for backward compatibility of old sidebar
 		Kind:        action_kit_api.Check,
 		TimeControl: action_kit_api.TimeControlInternal,
 		Parameters: []action_kit_api.ActionParameter{
@@ -208,7 +207,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	}
 
 	if !res.IsSuccess() {
-		log.Err(err).Msgf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String())
+		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), err))
 	}
 
 	var checkError *action_kit_api.ActionKitError

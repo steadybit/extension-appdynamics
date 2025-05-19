@@ -19,6 +19,7 @@ type Specification struct {
 	AccessToken                             string   `json:"accessToken" split_words:"true" required:"true"`
 	ApiBaseUrl                              string   `json:"apiBaseUrl" split_words:"true" required:"true"`
 	EventApplicationID                      string   `json:"eventApplicationID" split_words:"true" required:"false"`
+	ActionSuppressionTimezone               string   `json:"actionSuppressionTimezone" split_words:"true" required:"false"`
 	DiscoveryAttributesExcludesApplications []string `json:"discoveryAttributesExcludesApplications" split_words:"true" required:"false"`
 }
 

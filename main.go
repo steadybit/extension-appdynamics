@@ -45,6 +45,7 @@ func main() {
 	discovery_kit_sdk.Register(extappdynamics.NewApplicationDiscovery())
 	discovery_kit_sdk.Register(extappdynamics.NewHealthRuleDiscovery())
 	action_kit_sdk.RegisterAction(extappdynamics.NewHealthRuleStateCheckAction())
+	action_kit_sdk.RegisterAction(extappdynamics.NewActionSuppressionAction())
 
 	if config.Config.EventApplicationID != "" {
 		extevents.RegisterEventListenerHandlers()

@@ -40,3 +40,28 @@ type EntityDef struct {
 	Name       string `json:"name"`
 	EntityID   int64  `json:"entityId"`
 }
+
+type ActionSuppressionResponse struct {
+	ID                      int     `json:"id"`
+	Name                    string  `json:"name"`
+	DisableAgentReporting   bool    `json:"disableAgentReporting"`
+	SuppressionScheduleType string  `json:"suppressionScheduleType"`
+	Timezone                string  `json:"timezone"`
+	StartTime               string  `json:"startTime"`
+	EndTime                 string  `json:"endTime"`
+	Affects                 Affects `json:"affects"`
+}
+
+type ActionSuppressionRequest struct {
+	Name                    string  `json:"name"`
+	DisableAgentReporting   bool    `json:"disableAgentReporting"`
+	SuppressionScheduleType string  `json:"suppressionScheduleType"`
+	Timezone                string  `json:"timezone"`
+	StartTime               string  `json:"startTime"`
+	EndTime                 string  `json:"endTime"`
+	Affects                 Affects `json:"affects"`
+}
+
+type Affects struct {
+	AffectedInfoType string `json:"affectedInfoType"`
+}
