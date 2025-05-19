@@ -13,6 +13,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
+	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
 	"strconv"
@@ -28,6 +29,7 @@ const (
 	AttributeAffectedEntityType = ".affected_entity_type"
 	AttributeAppID              = ".application.id"
 	AttributeAppName            = ".application.name"
+	AttributeOrigin             = ".origin"
 )
 
 var (
@@ -67,6 +69,7 @@ func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescripti
 				{Attribute: HealthRuleAttribute + AttributeAffectedEntityType},
 				{Attribute: HealthRuleAttribute + AttributeAppID},
 				{Attribute: HealthRuleAttribute + AttributeAppName},
+				{Attribute: HealthRuleAttribute + AttributeOrigin},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
@@ -115,6 +118,12 @@ func (d *healthRuleDiscovery) DescribeAttributes() []discovery_kit_api.Attribute
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Health rule application name",
 				Other: "Health rule application names",
+			},
+		}, {
+			Attribute: HealthRuleAttribute + AttributeOrigin,
+			Label: discovery_kit_api.PluralLabel{
+				One:   "Health rule controller url",
+				Other: "Health rule controller urls",
 			},
 		},
 	}
@@ -177,6 +186,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 					HealthRuleAttribute + AttributeAffectedEntityType: {healthRule.AffectedEntityType},
 					HealthRuleAttribute + AttributeAppID:              {strconv.Itoa(app.ID)},
 					HealthRuleAttribute + AttributeAppName:            {app.Name},
+					HealthRuleAttribute + AttributeOrigin:             {config.Config.ApiBaseUrl},
 				}})
 		}
 	}

@@ -13,6 +13,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
+	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
 	"strconv"
@@ -24,8 +25,9 @@ type applicationDiscovery struct {
 
 const (
 	AppAttribute   = "appdynamics.application"
-	AppAccountGUID = ".account_guid"
+	AppAccountGUID = ".account-guid"
 	AppDescription = ".description"
+	AppOrigin      = ".origin"
 )
 
 var (
@@ -63,6 +65,7 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 				{Attribute: AppAttribute + ".id"},
 				{Attribute: AppAttribute + AppDescription},
 				{Attribute: AppAttribute + AppAccountGUID},
+				{Attribute: AppAttribute + AppOrigin},
 			},
 			OrderBy: []discovery_kit_api.OrderBy{
 				{
@@ -95,10 +98,16 @@ func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.Attribut
 				Other: "Descriptions",
 			},
 		}, {
-			Attribute: AppAttribute + ".account_guid",
+			Attribute: AppAttribute + AppAccountGUID,
 			Label: discovery_kit_api.PluralLabel{
 				One:   "Account GUID",
 				Other: "Account GUIDs",
+			},
+		}, {
+			Attribute: AppAttribute + AppOrigin,
+			Label: discovery_kit_api.PluralLabel{
+				One:   "Controller Url",
+				Other: "Controller Urls",
 			},
 		},
 	}
@@ -142,6 +151,7 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 				AppAttribute + ".name":        {app.Name},
 				AppAttribute + ".id":          {strconv.Itoa(app.ID)},
 				AppAttribute + AppAccountGUID: {app.AccountGUID},
+				AppAttribute + AppOrigin:      {config.Config.ApiBaseUrl},
 			}})
 	}
 
