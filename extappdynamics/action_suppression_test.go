@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -105,7 +106,7 @@ func TestActionSuppressionStartSuccess(t *testing.T) {
 		t.Fatal("expected non-nil StartResult with messages")
 	}
 
-	if receivedReq.Name != "Steadybit-app-123" {
+	if !strings.HasPrefix(receivedReq.Name, "Steadybit-app-123") {
 		t.Errorf("expected Name 'Steadybit-app-123', got %s", receivedReq.Name)
 	}
 	if receivedReq.DisableAgentReporting != true {

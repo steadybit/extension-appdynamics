@@ -17,7 +17,6 @@ import (
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -118,11 +117,10 @@ func (m *ActionSuppressionAction) Stop(ctx context.Context, state *ActionSuppres
 func ActionSuppressionStart(ctx context.Context, state *ActionSuppressionState, client *resty.Client) (*action_kit_api.StartResult, error) {
 	// Get configured Time Zone if none is defined
 	var timezone string
-	var err error
 	if config.Config.ActionSuppressionTimezone == "" {
 		tz, err := GetLocalTimezone()
 		if err != nil {
-			return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("Failed to get current timezone."), err))
+			return nil, extutil.Ptr(extension_kit.ToError("Failed to get current timezone.", err))
 		}
 		timezone = tz
 	} else {
@@ -185,18 +183,11 @@ func ActionSuppressionStop(ctx context.Context, state *ActionSuppressionState, c
 	}, nil
 }
 
-// GetLocalTimezone tries, in order:
-// 1) $TZ if set to an IANA name
-// 2) /etc/timezone (Debian‐style)
-// 3) resolving the /etc/localtime symlink
-// 4) falling back to time.Local.String()
 func GetLocalTimezone() (string, error) {
-	// 1) check TZ env
 	if tz := os.Getenv("TZ"); tz != "" && strings.Contains(tz, "/") {
 		return tz, nil
 	}
 
-	// 2) Debian‐style file
 	if data, err := os.ReadFile("/etc/timezone"); err == nil {
 		tz := strings.TrimSpace(string(data))
 		if strings.Contains(tz, "/") {
@@ -204,13 +195,9 @@ func GetLocalTimezone() (string, error) {
 		}
 	}
 
-	// 3) /etc/localtime symlink back to zoneinfo
 	const localtime = "/etc/localtime"
 	if link, err := os.Readlink(localtime); err == nil {
-		// e.g. /usr/share/zoneinfo/Asia/Kolkata
-		parts := filepath.SplitList(link)
-		// filepath.SplitList doesn’t split on “/” on Unix, so:
-		parts = strings.Split(link, string(os.PathSeparator))
+		parts := strings.Split(link, string(os.PathSeparator))
 		for i, p := range parts {
 			if p == "zoneinfo" && i+1 < len(parts) {
 				return strings.Join(parts[i+1:], "/"), nil
@@ -218,7 +205,6 @@ func GetLocalTimezone() (string, error) {
 		}
 	}
 
-	// 4) fallback
 	name := time.Now().Location().String()
 	if name == "Local" || name == "" {
 		return "", errors.New("could not determine local timezone")

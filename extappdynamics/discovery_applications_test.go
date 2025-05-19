@@ -58,8 +58,8 @@ func TestGetAllApplications_Success(t *testing.T) {
 	if attrs[AppAttribute+".description"][0] != "Test Desc" {
 		t.Errorf("expected description=\"Test Desc\", got %q", attrs[AppAttribute+".description"][0])
 	}
-	if attrs[AppAttribute+".account_guid"][0] != "GUID-123" {
-		t.Errorf("expected account_guid=\"GUID-123\", got %q", attrs[AppAttribute+".account_guid"][0])
+	if attrs[AppAttribute+".account-guid"][0] != "GUID-123" {
+		t.Errorf("expected account-guid=\"GUID-123\", got %q", attrs[AppAttribute+AppAccountGUID][0])
 	}
 }
 
@@ -101,8 +101,8 @@ func TestApplicationDiscovery_DescribeTarget(t *testing.T) {
 	if td.Category == nil || *td.Category != "monitoring" {
 		t.Errorf("expected Category=\"monitoring\", got %v", td.Category)
 	}
-	if len(td.Table.Columns) != 4 {
-		t.Errorf("expected 4 table columns, got %d", len(td.Table.Columns))
+	if len(td.Table.Columns) != 5 {
+		t.Errorf("expected 5 table columns, got %d", len(td.Table.Columns))
 	}
 }
 
@@ -113,7 +113,8 @@ func TestApplicationDiscovery_DescribeAttributes(t *testing.T) {
 		AppAttribute + ".name",
 		AppAttribute + ".id",
 		AppAttribute + ".description",
-		AppAttribute + ".account_guid",
+		AppAttribute + AppAccountGUID,
+		AppAttribute + AppOrigin,
 	}
 	if len(attrs) != len(want) {
 		t.Fatalf("DescribeAttributes() len = %d; want %d", len(attrs), len(want))
