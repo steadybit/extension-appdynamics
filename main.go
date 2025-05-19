@@ -15,6 +15,7 @@ import (
 	"github.com/steadybit/event-kit/go/event_kit_api"
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-appdynamics/extappdynamics"
+	"github.com/steadybit/extension-appdynamics/extevents"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/exthealth"
 	"github.com/steadybit/extension-kit/exthttp"
@@ -42,8 +43,12 @@ func main() {
 	exthttp.RegisterHttpHandler("/", exthttp.GetterAsHandler(getExtensionList))
 
 	discovery_kit_sdk.Register(extappdynamics.NewApplicationDiscovery())
-	discovery_kit_sdk.Register(extappdynamics.NewhealthRuleDiscovery())
+	discovery_kit_sdk.Register(extappdynamics.NewHealthRuleDiscovery())
 	action_kit_sdk.RegisterAction(extappdynamics.NewHealthRuleStateCheckAction())
+
+	if config.Config.EventApplicationID != "" {
+		extevents.RegisterEventListenerHandlers()
+	}
 
 	extsignals.ActivateSignalHandlers()
 
@@ -61,6 +66,11 @@ func initRestyClient() {
 	extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
 	extappdynamics.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
 	extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
+
+	extevents.RestyClient = resty.New()
+	extevents.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
+	extevents.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
+	extevents.RestyClient.SetHeader("Content-Type", "application/json")
 }
 
 type ExtensionListResponse struct {
@@ -70,8 +80,41 @@ type ExtensionListResponse struct {
 }
 
 func getExtensionList() ExtensionListResponse {
-	return ExtensionListResponse{
+	extList := ExtensionListResponse{
 		ActionList:    action_kit_sdk.GetActionList(),
 		DiscoveryList: discovery_kit_sdk.GetDiscoveryList(),
 	}
+	if config.Config.EventApplicationID != "" {
+		extList.EventListenerList = event_kit_api.EventListenerList{
+			EventListeners: []event_kit_api.EventListener{
+				{
+					Method:   "POST",
+					Path:     "/events/experiment-started",
+					ListenTo: []string{"experiment.execution.created"},
+				},
+				{
+					Method:   "POST",
+					Path:     "/events/experiment-completed",
+					ListenTo: []string{"experiment.execution.completed", "experiment.execution.failed", "experiment.execution.canceled", "experiment.execution.errored"},
+				},
+				{
+					Method:   "POST",
+					Path:     "/events/experiment-step-started",
+					ListenTo: []string{"experiment.execution.step-started"},
+				},
+				{
+					Method:   "POST",
+					Path:     "/events/experiment-target-started",
+					ListenTo: []string{"experiment.execution.target-started"},
+				},
+				{
+					Method:   "POST",
+					Path:     "/events/experiment-target-completed",
+					ListenTo: []string{"experiment.execution.target-completed", "experiment.execution.target-canceled", "experiment.execution.target-errored", "experiment.execution.target-failed"},
+				},
+			},
+		}
+
+	}
+	return extList
 }

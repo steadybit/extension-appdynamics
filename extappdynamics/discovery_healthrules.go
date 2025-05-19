@@ -35,7 +35,7 @@ var (
 	_ discovery_kit_sdk.AttributeDescriber = (*healthRuleDiscovery)(nil)
 )
 
-func NewhealthRuleDiscovery() discovery_kit_sdk.TargetDiscovery {
+func NewHealthRuleDiscovery() discovery_kit_sdk.TargetDiscovery {
 	discovery := &healthRuleDiscovery{}
 	return discovery_kit_sdk.NewCachedTargetDiscovery(discovery,
 		discovery_kit_sdk.WithRefreshTargetsNow(),
