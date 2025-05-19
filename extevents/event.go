@@ -200,39 +200,40 @@ func getTargetProperties(target event_kit_api.ExperimentStepTargetExecution) []K
 	const clusterNameSteadybitAttribute = "k8s.cluster-name"
 
 	if _, ok := target.TargetAttributes[clusterNameSteadybitAttribute]; ok {
-		getTargetAttributeToKeyValue(tags, target, clusterNameSteadybitAttribute)
-		getTargetAttributeToKeyValue(tags, target, "k8s.namespace")
-		getTargetAttributeToKeyValue(tags, target, "k8s.deployment")
-		getTargetAttributeToKeyValue(tags, target, "k8s.pod.name")
-		getTargetAttributeToKeyValue(tags, target, "k8s.container.name")
+		tags = getTargetAttributeToKeyValue(tags, target, clusterNameSteadybitAttribute)
+		tags = getTargetAttributeToKeyValue(tags, target, "k8s.namespace")
+		tags = getTargetAttributeToKeyValue(tags, target, "k8s.deployment")
+		tags = getTargetAttributeToKeyValue(tags, target, "k8s.pod.name")
+		tags = getTargetAttributeToKeyValue(tags, target, "k8s.container.name")
 	}
 
-	getTargetAttributeToKeyValue(tags, target, "container.host")
-	getTargetAttributeToKeyValue(tags, target, "container.host")
-	getTargetAttributeToKeyValue(tags, target, "host.hostname")
-	getTargetAttributeToKeyValue(tags, target, "application.hostname")
+	tags = getTargetAttributeToKeyValue(tags, target, "container.host")
+	tags = getTargetAttributeToKeyValue(tags, target, "container.host")
+	tags = getTargetAttributeToKeyValue(tags, target, "host.hostname")
+	tags = getTargetAttributeToKeyValue(tags, target, "application.hostname")
 
-	getTargetAttributeToKeyValue(tags, target, "container.id.stripped")
+	tags = getTargetAttributeToKeyValue(tags, target, "container.id.stripped")
 
 	if _, ok := target.TargetAttributes["aws.region"]; ok {
 		//AWS tags
 		tags = append(tags, KeyValue{Key: "propertynames", Value: "cloud.provider"})
 		tags = append(tags, KeyValue{Key: "propertyvalues", Value: "aws"})
-		getTargetAttributeToKeyValue(tags, target, "aws.region")
-		getTargetAttributeToKeyValue(tags, target, "aws.zone")
-		getTargetAttributeToKeyValue(tags, target, "aws.account")
+		tags = getTargetAttributeToKeyValue(tags, target, "aws.region")
+		tags = getTargetAttributeToKeyValue(tags, target, "aws.zone")
+		tags = getTargetAttributeToKeyValue(tags, target, "aws.account")
 	}
 
 	return tags
 }
 
-func getTargetAttributeToKeyValue(tags []KeyValue, target event_kit_api.ExperimentStepTargetExecution, steadybitAttribute string) {
+func getTargetAttributeToKeyValue(tags []KeyValue, target event_kit_api.ExperimentStepTargetExecution, steadybitAttribute string) []KeyValue {
 	if values, ok := target.TargetAttributes[steadybitAttribute]; ok {
 		if (len(values)) == 1 {
 			tags = append(tags, KeyValue{Key: "propertynames", Value: steadybitAttribute})
 			tags = append(tags, KeyValue{Key: "propertyvalues", Value: values[0]})
 		}
 	}
+	return tags
 }
 
 func parseBodyToEventRequestBody(body []byte) (event_kit_api.EventRequestBody, error) {
