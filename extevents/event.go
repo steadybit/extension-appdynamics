@@ -247,15 +247,12 @@ func handlePostEvent(ctx context.Context, client *resty.Client, queryParameters 
 		log.Err(err).Msgf("Failed to create query string for the custom event: %v", err)
 		return
 	}
-
 	req := client.R().
 		SetContext(ctx).
 		SetQueryString(query)
 
 	res, err := req.
 		Post("/controller/rest/applications/" + config.Config.EventApplicationID + "/events")
-
-	log.Info().Msg("req: " + req.URL)
 
 	if err != nil {
 		log.Err(err).Msgf("Failed to post custom event. Full response: %v", res.String())
