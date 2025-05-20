@@ -61,7 +61,7 @@ spec:
             {{- end }}
             {{- if .Values.discovery.attributes.excludes.healthRule }}
             - name: STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES
-              value: {{ join "," .Values.discovery.attributes.excludes.application | quote }}
+              value: {{ join "," .Values.discovery.attributes.excludes.healthRule | quote }}
             {{- end }}
             - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
               valueFrom:
@@ -73,6 +73,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "appdynamics.secret.name" . }}
                   key: apiBaseUrl
+            - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "appdynamics.secret.name" . }}
+                  key: eventApplicationID
+            - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "appdynamics.secret.name" . }}
+                  key: actionSuppressionTimezone
           {{- with .Values.extraEnvFrom }}
           envFrom:
             {{- toYaml . | nindent 12 }}

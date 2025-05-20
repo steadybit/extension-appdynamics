@@ -38,6 +38,16 @@ manifest should match snapshot using podAnnotations and Labels:
                     secretKeyRef:
                       key: apiBaseUrl
                       name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -116,6 +126,16 @@ manifest should match snapshot with TLS:
                   valueFrom:
                     secretKeyRef:
                       key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
                       name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
@@ -203,6 +223,16 @@ manifest should match snapshot with extra env vars:
                     secretKeyRef:
                       key: apiBaseUrl
                       name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
+                      name: steadybit-extension-appdynamics
               envFrom:
                 - configMapRef: null
                   name: env-configmap
@@ -289,6 +319,16 @@ manifest should match snapshot with extra labels:
                     secretKeyRef:
                       key: apiBaseUrl
                       name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -367,6 +407,16 @@ manifest should match snapshot with mutual TLS:
                   valueFrom:
                     secretKeyRef:
                       key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
                       name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
@@ -461,6 +511,16 @@ manifest should match snapshot with mutual TLS using containerPaths:
                     secretKeyRef:
                       key: apiBaseUrl
                       name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -539,6 +599,16 @@ manifest should match snapshot with podSecurityContext:
                   valueFrom:
                     secretKeyRef:
                       key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
                       name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
@@ -620,6 +690,16 @@ manifest should match snapshot with priority class:
                     secretKeyRef:
                       key: apiBaseUrl
                       name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
+                      name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -699,6 +779,16 @@ manifest should match snapshot without TLS:
                   valueFrom:
                     secretKeyRef:
                       key: apiBaseUrl
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: eventApplicationID
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  valueFrom:
+                    secretKeyRef:
+                      key: actionSuppressionTimezone
                       name: steadybit-extension-appdynamics
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent

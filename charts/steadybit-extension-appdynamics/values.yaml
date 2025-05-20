@@ -6,6 +6,10 @@ appdynamics:
   accessToken: ""
   # appdynamics.apiBaseUrl -- The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`
   apiBaseUrl: ""
+  # appdynamics.eventApplicationID -- The ID of the application to send events to (optional).
+  eventApplicationID: ""
+  # appdynamics.actionSuppressionTimezone -- The timezone to enforce for the action suppression action in the form "Europe/Paris", if none, the local one will be determined where the extension is deployed (optional)
+  actionSuppressionTimezone: ""
   # appdynamics.existingSecret -- If defined, will skip secret creation and instead assume that the referenced secret contains the keys accessToken and apiBaseUrl.
   existingSecret: null
 

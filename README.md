@@ -1,16 +1,24 @@
 # Steadybit extension-appdynamics
 
-TODO describe what your extension is doing here from a user perspective.
+A [Steadybit](https://www.steadybit.com/) extension to integrate [AppDynamics](https://docs.appdynamics.com/) into Steadybit.
 
-TODO optionally add your extension to the [Reliability Hub](https://hub.steadybit.com/) by creating
-a [pull request](https://github.com/steadybit/reliability-hub-db) and add a link to this README.
+Learn about the capabilities of this extension in our [Reliability Hub](https://hub.steadybit.com/extension/com.steadybit.extension_appdynamics).
+
+## Prerequisites
+
+You need to have an Api Client [access token](https://docs.appdynamics.com/appd/23.x/latest/en/extend-appdynamics/appdynamics-apis/api-clients). The token must have the following permissions:
+- Account Owner
 
 ## Configuration
 
-| Environment Variable                                      | Helm value                           | Meaning                                                                                                               | Required | Default                 |
-|-----------------------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|----------|-------------------------|
-| `STEADYBIT_EXTENSION_ROBOT_NAMES`                         |                                      | Comma-separated list of discoverable robots                                                                           | yes      | Bender,Terminator,R2-D2 |
-| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_ROBOT` | `discovery.attributes.excludes.robot | List of Robot Attributes which will be excluded during discovery. Checked by key equality and supporting trailing "*" | no       |                         |
+| Environment Variable                                             | Helm value                                 | Meaning                                                                                                                                                                     | Required | Default |
+|------------------------------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|
+| `STEADYBIT_EXTENSION_ACCESS_TOKEN`                               | appdynamics.accessToken                    | The Access Token used to access the AppDynamics API.                                                                                                                        | yes      |         |
+| `STEADYBIT_EXTENSION_API_BASE_URL`                               | appdynamics.apiBaseUrl                     | The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`                                                                                | yes      |         |
+| `STEADYBIT_EXTENSION_EVENT_APPLICATION_ID`                       | appdynamics.eventApplicationID             | The ID of the application to send events to (optional).                                                                                                                     | no       |         |
+| `STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE`                | appdynamics.actionSuppressionTimezone      | The timezone to enforce for the action suppression action in the form "Europe/Paris", if none, the local one will be determined where the extension is deployed (optional). | no       |         |
+| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_APPLICATIONS` | `discovery.attributes.excludes.application | List of Application attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                              | no       |         |
+| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES` | `discovery.attributes.excludes.healthRule  | List of Health Rule attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                              | no       |         |
 
 The extension supports all environment variables provided by [steadybit/extension-kit](https://github.com/steadybit/extension-kit#environment-variables).
 
