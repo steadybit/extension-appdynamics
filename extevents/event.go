@@ -162,9 +162,9 @@ func getStepTags(step event_kit_api.ExperimentStepExecution) []KeyValue {
 		tags = append(tags, KeyValue{Key: "propertynames", Value: "step_label"})
 		tags = append(tags, KeyValue{Key: "propertyvalues", Value: *step.CustomLabel})
 	}
-	tags = append(tags, KeyValue{Key: "propertynames", Value: "step_exec_id"})
+	tags = append(tags, KeyValue{Key: "propertynames", Value: "exec_id"})
 	tags = append(tags, KeyValue{Key: "propertyvalues", Value: fmt.Sprintf("%.0f", step.ExecutionId)})
-	tags = append(tags, KeyValue{Key: "propertynames", Value: "step_exp_key"})
+	tags = append(tags, KeyValue{Key: "propertynames", Value: "exp_key"})
 	tags = append(tags, KeyValue{Key: "propertyvalues", Value: step.ExperimentKey})
 	tags = append(tags, KeyValue{Key: "propertynames", Value: "step_id"})
 	tags = append(tags, KeyValue{Key: "propertyvalues", Value: step.Id.String()})
