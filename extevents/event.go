@@ -106,7 +106,13 @@ func getEventBaseTags(event event_kit_api.EventRequestBody) []KeyValue {
 	tags = append(tags, KeyValue{Key: "customeventtype", Value: "Steadybit"})
 	tags = append(tags, KeyValue{Key: "eventtype", Value: "CUSTOM"})
 	tags = append(tags, KeyValue{Key: "severity", Value: "info"})
-	tags = append(tags, KeyValue{Key: "summary", Value: "Steadybit Event " + event.Id.String() + " " + event.EventName})
+	var summary string
+	if event.ExperimentStepExecution != nil && event.ExperimentStepExecution.ActionName != nil {
+		summary = "Steadybit (ENV:" + event.Environment.Name + ") (TEAM:" + event.Team.Name + ") " + *event.ExperimentStepExecution.ActionName
+	} else {
+		summary = "Steadybit (ENV:" + event.Environment.Name + ") (TEAM:" + event.Team.Name + ") " + event.EventName
+	}
+	tags = append(tags, KeyValue{Key: "summary", Value: summary})
 	tags = append(tags, KeyValue{Key: "propertynames", Value: "Environment"})
 	tags = append(tags, KeyValue{Key: "propertyvalues", Value: event.Environment.Name})
 	tags = append(tags, KeyValue{Key: "propertynames", Value: "Tenant"})
