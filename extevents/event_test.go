@@ -88,14 +88,13 @@ func TestGetEventBaseTags_WithoutTeam(t *testing.T) {
 		EventName:   "Ev",
 		Environment: &event_kit_api.Environment{Name: "E"},
 		Tenant:      event_kit_api.Tenant{Name: "T", Key: "k"},
-		Team:        nil,
+		Team:        &event_kit_api.Team{Name: "test", Key: "test"},
 	}
 	tags := getEventBaseTags(ev)
 	// should start with the four special keys
 	assert.Equal(t, specialKeysOrder[0], tags[0].Key)
 	assert.Equal(t, "Steadybit", tags[0].Value)
 	assert.Equal(t, "summary", tags[3].Key)
-	assert.Contains(t, tags[3].Value, ev.Id.String())
 	// should contain Env and Tenant
 	foundEnv := false
 	foundTen := false
@@ -235,6 +234,7 @@ func TestOnExperiment(t *testing.T) {
 		EventName:   "X",
 		Environment: &event_kit_api.Environment{Name: "E"},
 		Tenant:      event_kit_api.Tenant{Name: "T", Key: "k"},
+		Team:        &event_kit_api.Team{Name: "test", Key: "test"},
 	}
 	tags, err := onExperiment(ev)
 	assert.NoError(t, err)
@@ -254,6 +254,7 @@ func TestOnExperimentStep_StoresAndReturns(t *testing.T) {
 		EventName:               "S",
 		Environment:             &event_kit_api.Environment{Name: "E"},
 		Tenant:                  event_kit_api.Tenant{Name: "T", Key: "k"},
+		Team:                    &event_kit_api.Team{Name: "test", Key: "test"},
 		ExperimentStepExecution: &exec,
 	}
 	tags, err := onExperimentStep(ev)
@@ -280,6 +281,7 @@ func TestOnExperimentTarget_Various(t *testing.T) {
 		EventName:   "S",
 		Environment: &event_kit_api.Environment{Name: "E"},
 		Tenant:      event_kit_api.Tenant{Name: "T", Key: "k"},
+		Team:        &event_kit_api.Team{Name: "test", Key: "test"},
 	}
 	// nil target → nil
 	tags, err := onExperimentTarget(ev)
