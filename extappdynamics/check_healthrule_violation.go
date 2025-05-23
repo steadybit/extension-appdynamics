@@ -60,7 +60,7 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 			QuantityRestriction: extutil.Ptr(action_kit_api.All),
 			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
 				{
-					Label:       "default",
+					Label:       "Health Rule name",
 					Description: extutil.Ptr("Find health rule by name"),
 					Query:       "appdynamics.health-rule.name=\"\"",
 				},
