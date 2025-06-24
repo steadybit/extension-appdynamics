@@ -216,7 +216,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	if state.StateCheckMode == StateCheckModeAllTheTime {
 		if !state.IsViolationExpected == healthRuleHasViolations {
 			checkError = extutil.Ptr(action_kit_api.ActionKitError{
-				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected :%t'.",
+				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t'.",
 					state.HealthRuleName,
 					healthRuleHasViolations,
 					state.IsViolationExpected),
@@ -229,7 +229,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 		}
 		if completed && !state.StateCheckSuccess {
 			checkError = extutil.Ptr(action_kit_api.ActionKitError{
-				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected :%t' was expected once.",
+				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t' was expected once.",
 					state.HealthRuleName,
 					healthRuleHasViolations,
 					state.IsViolationExpected),

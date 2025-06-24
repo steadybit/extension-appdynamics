@@ -62,7 +62,7 @@ func TestWithMinikube(t *testing.T) {
 		},
 		{
 			Name: "health rule check fails expectations",
-			Test: testHealthRuleCheck(true, "2", "[failed] HealthRule 'health rule name' has violations 'false' whereas 'Violations Expected :true'."),
+			Test: testHealthRuleCheck(true, "2", "[failed] HealthRule 'health rule name' has violations 'false' whereas 'Violations Expected: true'."),
 		},
 	})
 }
