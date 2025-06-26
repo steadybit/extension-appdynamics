@@ -74,9 +74,21 @@ tests:
         runAsUser: 2222
     asserts:
       - matchSnapshot: {}
-
   - it: manifest should match snapshot with priority class
     set:
       priorityClassName: my-priority-class
+    asserts:
+      - matchSnapshot: {}
+  - it: manifest should render appdynamic settings
+    set:
+      appdynamics.apiBaseUrl: https://my-url.com
+      appdynamics.apiClientName: my-client-name
+      appdynamics.apiClientSecret: my-client-name
+      appdynamics.accountName: my-account-name
+    asserts:
+      - matchSnapshot: {}
+  - it: manifest should render deprecated accesstoken
+    set:
+      appdynamics.accessToken: x12345y
     asserts:
       - matchSnapshot: {}

@@ -5,6 +5,9 @@
 package main
 
 import (
+	"context"
+	"encoding/base64"
+	"fmt"
 	_ "github.com/KimMachineGun/automemlimit" // By default, it sets `GOMEMLIMIT` to 90% of cgroup's memory limit.
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog"
@@ -23,7 +26,10 @@ import (
 	"github.com/steadybit/extension-kit/extruntime"
 	"github.com/steadybit/extension-kit/extsignals"
 	_ "go.uber.org/automaxprocs" // Importing automaxprocs automatically adjusts GOMAXPROCS.
-	_ "net/http/pprof"           //allow pprof
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
+	"net/http"
+	_ "net/http/pprof" //allow pprof
 	"strings"
 )
 
@@ -63,15 +69,60 @@ func main() {
 }
 
 func initRestyClient() {
-	extappdynamics.RestyClient = resty.New()
-	extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
-	extappdynamics.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
-	extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
+	if config.Config.AccessToken != "" {
+		extappdynamics.RestyClient = resty.New()
+		extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
+		extappdynamics.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
+		extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
 
-	extevents.RestyClient = resty.New()
-	extevents.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
-	extevents.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
-	extevents.RestyClient.SetHeader("Content-Type", "application/json")
+		extevents.RestyClient = resty.New()
+		extevents.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
+		extevents.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
+		extevents.RestyClient.SetHeader("Content-Type", "application/json")
+	} else {
+		tokenUrl := fmt.Sprintf("%s/controller/api/oauth/access_token", config.Config.ApiBaseUrl)
+		oauth2ClientCredentials := clientcredentials.Config{
+			ClientID:     fmt.Sprintf("%s@%s", config.Config.ApiClientName, config.Config.AccountName),
+			ClientSecret: config.Config.ApiClientSecret,
+			TokenURL:     tokenUrl,
+			AuthStyle:    oauth2.AuthStyleInParams,
+		}
+		tokenHttpClient := &http.Client{
+			Transport: &basicAuthTransport{
+				base:     http.DefaultTransport,
+				username: config.Config.ApiClientName,
+				password: config.Config.ApiClientSecret,
+				tokenURL: tokenUrl,
+			},
+		}
+		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, tokenHttpClient)
+		httpClient := oauth2ClientCredentials.Client(ctx)
+
+		extappdynamics.RestyClient = resty.NewWithClient(httpClient)
+		extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
+		extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
+
+		extevents.RestyClient = resty.NewWithClient(httpClient)
+		extevents.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
+		extevents.RestyClient.SetHeader("Content-Type", "application/json")
+	}
+}
+
+type basicAuthTransport struct {
+	base     http.RoundTripper
+	username string
+	password string
+	tokenURL string
+}
+
+func (t *basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Add Basic Auth only to token requests
+	if req.URL.String() == t.tokenURL {
+		auth := base64.StdEncoding.EncodeToString([]byte(t.username + ":" + t.password))
+		req.Header.Set("Authorization", "Basic "+auth)
+	}
+
+	return t.base.RoundTrip(req)
 }
 
 type ExtensionListResponse struct {

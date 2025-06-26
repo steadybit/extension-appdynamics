@@ -34,6 +34,7 @@ func createMockAppDynamicsController() *mockServer {
 	log.Info().Str("url", server.URL).Msg("Started Mock-Server")
 
 	mock := &mockServer{http: &server, state: "CLEAR"}
+	mux.Handle("/controller/api/oauth/access_token", handler(mock.getToken))
 	mux.Handle("/controller/rest/applications", handler(mock.viewApplications))
 	mux.Handle("/controller/alerting/rest/v1/applications/1/health-rules", handler(mock.viewHealthRules))
 	mux.Handle("/controller/alerting/rest/v1/applications/2/health-rules", handler(mock.viewHealthRulesForApp2))
@@ -44,6 +45,13 @@ func createMockAppDynamicsController() *mockServer {
 
 func handler[T any](getter func() T) http.Handler {
 	return exthttp.PanicRecovery(exthttp.LogRequest(exthttp.GetterAsHandler(getter)))
+}
+
+func (m *mockServer) getToken() extappdynamics.TokenResponse {
+	return extappdynamics.TokenResponse{
+		AccessToken: "eyJraWQiOiJhOGU4OTBlNS0zMjMwLTRlNGEtYTU2YS04NTg4Yjk0YjlhNTIiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBcHBEeW5hbWljcyIsImF1ZCI6IkFwcERfQVBJcyIsImp0aSI6IktkS3hNd3UyUS1oZzNoNWtCeFZSOFEiLCJzdWIiOiJ0ZXN0IiwiaWRUeXBlIjoiQVBJX0NMSUVOVCIsImlkIjoiYzYzNDQwZjQtODY5YS00YmRkLWJkZWEtZTJkMzlkZDc2ZmIxIiwiYWNjdElkIjoiYThlODkwZTUtMzIzMC00ZTRhLWE1NmEtODU4OGI5NGI5YTUyIiwidG50SWQiOiJhOGU4OTBlNS0zMjMwLTRlNGEtYTU2YS04NTg4Yjk0YjlhNTIiLCJhY2N0TmFtZSI6InR3aW4yMDI1MDYyMzIxNDY1MzUiLCJ0ZW5hbnROYW1lIjoidHdpbjIwMjUwNjIzMjE0NjUzNSIsImZtbVRudElkIjpudWxsLCJhY2N0UGVybSI6W10sInJvbGVJZHMiOltdLCJpYXQiOjE3NTA5MzY5NzAsIm5iZiI6MTc1MDkzNjg1MCwiZXhwIjoxNzUwOTU0OTcwLCJ0b2tlblR5cGUiOiJBQ0NFU1MifQ._lEFk3Wmuo7ch_3MqcBaQj2cDjrs-8r8nBOxMXZMkhE",
+		ExpiresIn:   18000,
+	}
 }
 
 func (m *mockServer) viewApplications() []extappdynamics.Application {

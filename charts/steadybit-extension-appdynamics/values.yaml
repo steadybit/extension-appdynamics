@@ -2,10 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 appdynamics:
-  # appdynamics.accessToken -- The Access Token used to access the AppDynamics API.
+  # appdynamics.accessToken -- DEPRECATED - please use apiClientName, apiClientSecret and accountName instead
   accessToken: ""
   # appdynamics.apiBaseUrl -- The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`
   apiBaseUrl: ""
+  # appdynamics.apiClientName -- The name of the api client
+  apiClientName: ""
+  # appdynamics.apiClientSecret -- The secret of the api client.
+  apiClientSecret: ""
+  # appdynamics.accountName -- The name of the AppDynamics account, usually the first part of you url.
+  accountName: ""
   # appdynamics.eventApplicationID -- The ID of the application to send events to (optional).
   eventApplicationID: ""
   # appdynamics.actionSuppressionTimezone -- The timezone to enforce for the action suppression action in the form "Europe/Paris", if none, the local one will be determined where the extension is deployed (optional)

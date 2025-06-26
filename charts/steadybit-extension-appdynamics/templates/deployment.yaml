@@ -63,26 +63,38 @@ spec:
             - name: STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES
               value: {{ join "," .Values.discovery.attributes.excludes.healthRule | quote }}
             {{- end }}
+            {{- if .Values.appdynamics.accessToken }}
             - name: STEADYBIT_EXTENSION_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appdynamics.secret.name" . }}
                   key: accessToken
+            {{- end }}
             - name: STEADYBIT_EXTENSION_API_BASE_URL
+              value: {{ .Values.appdynamics.apiBaseUrl | quote }}
+            - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
+              value: {{ .Values.appdynamics.apiClientName | quote }}
+            {{- if .Values.appdynamics.apiClientSecret }}
+            - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appdynamics.secret.name" . }}
-                  key: apiBaseUrl
+                  key: apiClientSecret
+            {{- end }}
+            - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
+              value: {{ .Values.appdynamics.accountName | quote }}
+            {{- if .Values.appdynamics.eventApplicationID }}
             - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "appdynamics.secret.name" . }}
-                  key: eventApplicationID
+              value: {{ .Values.appdynamics.eventApplicationID | quote }}
+            {{- end }}
+            {{- if .Values.appdynamics.eventApplicationID }}
             - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "appdynamics.secret.name" . }}
-                  key: actionSuppressionTimezone
+              value: {{ .Values.appdynamics.eventApplicationID | quote }}
+            {{- end }}
+            {{- if .Values.appdynamics.actionSuppressionTimezone }}
+            - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+              value: {{ .Values.appdynamics.actionSuppressionTimezone | quote }}
+            {{- end }}
           {{- with .Values.extraEnvFrom }}
           envFrom:
             {{- toYaml . | nindent 12 }}

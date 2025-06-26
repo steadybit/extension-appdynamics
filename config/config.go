@@ -16,8 +16,12 @@ import (
 // through environment variables. Learn more through the documentation of the envconfig package.
 // https://github.com/kelseyhightower/envconfig
 type Specification struct {
-	AccessToken                             string   `json:"accessToken" split_words:"true" required:"true"`
+	// Deprecated: AccessToken is no longer supported. Use apiClientName, apiClientSecret, and accountName instead.
+	AccessToken                             string   `json:"accessToken" split_words:"true" required:"false"`
 	ApiBaseUrl                              string   `json:"apiBaseUrl" split_words:"true" required:"true"`
+	ApiClientName                           string   `json:"apiClientName" split_words:"true" required:"false"`
+	ApiClientSecret                         string   `json:"apiClientSecret" split_words:"true" required:"false"`
+	AccountName                             string   `json:"accountName" split_words:"true" required:"false"`
 	EventApplicationID                      string   `json:"eventApplicationID" split_words:"true" required:"false"`
 	ActionSuppressionTimezone               string   `json:"actionSuppressionTimezone" split_words:"true" required:"false"`
 	DiscoveryAttributesExcludesApplications []string `json:"discoveryAttributesExcludesApplications" split_words:"true" required:"false"`
@@ -35,5 +39,9 @@ func ParseConfiguration() {
 }
 
 func ValidateConfiguration() {
-	// You may optionally validate the configuration here.
+	if Config.AccessToken != "" {
+		log.Warn().Msg("Setting up an access token is deprecated. Please use apiClientName, apiClientSecret and accountName instead.")
+	} else if Config.ApiClientName == "" || Config.ApiClientSecret == "" || Config.AccountName == "" {
+		log.Fatal().Msg("ApiClientName, ApiClientSecret and AccountName must be set in the configuration.")
+	}
 }

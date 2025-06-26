@@ -6,19 +6,23 @@ Learn about the capabilities of this extension in our [Reliability Hub](https://
 
 ## Prerequisites
 
-You need to have an Api Client [access token](https://docs.appdynamics.com/appd/23.x/latest/en/extend-appdynamics/appdynamics-apis/api-clients). The token must have the following permissions:
+You need to have an [Api Client](https://docs.appdynamics.com/appd/23.x/latest/en/extend-appdynamics/appdynamics-apis/api-clients).
+
+The token must have the following permissions:
 - Account Owner
 
 ## Configuration
 
-| Environment Variable                                             | Helm value                                 | Meaning                                                                                                                                                                                                         | Required | Default |
-|------------------------------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|
-| `STEADYBIT_EXTENSION_ACCESS_TOKEN`                               | appdynamics.accessToken                    | The Access Token used to access the AppDynamics API.                                                                                                                                                            | yes      |         |
-| `STEADYBIT_EXTENSION_API_BASE_URL`                               | appdynamics.apiBaseUrl                     | The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`                                                                                                                    | yes      |         |
-| `STEADYBIT_EXTENSION_EVENT_APPLICATION_ID`                       | appdynamics.eventApplicationID             | The extension reports experiment executions to AppDynamics if an Application Event ID (A manually created Steadybit App is sufficient) is given, which helps you to correlate experiments with your dashboards. | no       |         |
-| `STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE`                | appdynamics.actionSuppressionTimezone      | The timezone to enforce for the action suppression action in the form "Europe/Paris", if none, the local one will be determined where the extension is deployed (optional).                                     | no       |         |
-| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_APPLICATIONS` | `discovery.attributes.excludes.application | List of Application attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
-| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES` | `discovery.attributes.excludes.healthRule  | List of Health Rule attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
+| Environment Variable                                             | Helm value                                | Meaning                                                                                                                                                                                                         | Required | Default |
+|------------------------------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|
+| `STEADYBIT_EXTENSION_API_BASE_URL`                               | appdynamics.apiBaseUrl                    | The base url for AppDynamics API Calls, for example `https://XXXXXXXXX.saas.appdynamics.com`                                                                                                                    | yes      |         |
+| `STEADYBIT_EXTENSION_API_CLIENT_NAME`                            | appdynamics.apiClientName                 | The name of the API client.                                                                                                                                                                                     | yes      |         |
+| `STEADYBIT_EXTENSION_API_CLIENT_SECRET`                          | appdynamics.apiClientSecret               | The secret of the API client.                                                                                                                                                                                   | yes      |         |
+| `STEADYBIT_EXTENSION_ACCOUNT_NAME`                               | appdynamics.accountName                   | The name of the AppDynamics account, usually the first part of you url.                                                                                                                                         | yes      |         |
+| `STEADYBIT_EXTENSION_EVENT_APPLICATION_ID`                       | appdynamics.eventApplicationID            | The extension reports experiment executions to AppDynamics if an Application Event ID (A manually created Steadybit App is sufficient) is given, which helps you to correlate experiments with your dashboards. | no       |         |
+| `STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE`                | appdynamics.actionSuppressionTimezone     | The timezone to enforce for the action suppression action in the form "Europe/Paris", if none, the local one will be determined where the extension is deployed (optional).                                     | no       |         |
+| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_APPLICATIONS` | discovery.attributes.excludes.application | List of Application attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
+| `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES` | discovery.attributes.excludes.healthRule  | List of Health Rule attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
 
 The extension supports all environment variables provided by [steadybit/extension-kit](https://github.com/steadybit/extension-kit#environment-variables).
 
@@ -38,6 +42,10 @@ You must provide additional values to activate this extension.
 
 ```
 --set extension-appdynamics.enabled=true \
+--set extension-appdynamics.appdynamics.apiBaseUrl="{{API_BASE_URL}}" \
+--set extension-appdynamics.appdynamics.apiClientName="{{API_CLIENT_NAME}}" \
+--set extension-appdynamics.appdynamics.apiClientSecret="{{API_CLIENT_SECRET}}" \
+--set extension-appdynamics.appdynamics.accountName="{{ACCOUNT_NAME}}" \
 ```
 
 Additional configuration options can be found in
@@ -58,6 +66,10 @@ helm upgrade steadybit-extension-appdynamics \
     --timeout 5m0s \
     --create-namespace \
     --namespace steadybit-agent \
+    --set appdynamics.apiBaseUrl="{{API_BASE_URL}}" \
+    --set appdynamics.apiClientName="{{API_CLIENT_NAME}}" \
+    --set appdynamics.apiClientSecret="{{API_CLIENT_SECRET}}" \
+    --set appdynamics.accountName="{{ACCOUNT_NAME}}" \
     steadybit-extension-appdynamics/steadybit-extension-appdynamics
 ```
 

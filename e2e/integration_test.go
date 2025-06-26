@@ -38,6 +38,9 @@ func TestWithMinikube(t *testing.T) {
 		ExtraArgs: func(m *e2e.Minikube) []string {
 			return []string{
 				"--set", fmt.Sprintf("appdynamics.apiBaseUrl=http://host.minikube.internal:%s", port),
+				"--set", "appdynamics.apiClientName=test",
+				"--set", "appdynamics.apiClientSecret=x123",
+				"--set", "appdynamics.accountName=e2e",
 				"--set", "logging.level=trace",
 			}
 		},

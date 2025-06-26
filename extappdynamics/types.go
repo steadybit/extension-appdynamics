@@ -65,3 +65,8 @@ type ActionSuppressionRequest struct {
 type Affects struct {
 	AffectedInfoType string `json:"affectedInfoType"`
 }
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int64  `json:"expires_in"`
+}
