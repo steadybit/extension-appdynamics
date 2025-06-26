@@ -72,17 +72,17 @@ spec:
             {{- end }}
             - name: STEADYBIT_EXTENSION_API_BASE_URL
               value: {{ .Values.appdynamics.apiBaseUrl | quote }}
+            {{- if not .Values.appdynamics.accessToken }}
             - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
               value: {{ .Values.appdynamics.apiClientName | quote }}
-            {{- if .Values.appdynamics.apiClientSecret }}
             - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appdynamics.secret.name" . }}
                   key: apiClientSecret
-            {{- end }}
             - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
               value: {{ .Values.appdynamics.accountName | quote }}
+            {{- end }}
             {{- if .Values.appdynamics.eventApplicationID }}
             - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
               value: {{ .Values.appdynamics.eventApplicationID | quote }}

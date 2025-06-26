@@ -32,6 +32,11 @@ manifest should match snapshot using podAnnotations and Labels:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -107,6 +112,11 @@ manifest should match snapshot with TLS:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -189,6 +199,11 @@ manifest should match snapshot with extra env vars:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               envFrom:
@@ -271,6 +286,11 @@ manifest should match snapshot with extra labels:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -346,6 +366,11 @@ manifest should match snapshot with mutual TLS:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -435,6 +460,11 @@ manifest should match snapshot with mutual TLS using containerPaths:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -510,6 +540,11 @@ manifest should match snapshot with podSecurityContext:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -586,6 +621,11 @@ manifest should match snapshot with priority class:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -662,6 +702,11 @@ manifest should match snapshot without TLS:
                   value: ""
                 - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
@@ -819,10 +864,6 @@ manifest should render deprecated accesstoken:
                       key: accessToken
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_API_BASE_URL
-                  value: ""
-                - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
-                  value: ""
-                - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
