@@ -85,6 +85,8 @@ tests:
       appdynamics.apiClientName: my-client-name
       appdynamics.apiClientSecret: my-client-name
       appdynamics.accountName: my-account-name
+      appdynamics.eventApplicationID: my-event-application-id
+      appdynamics.actionSuppressionTimezone: Europe/Berlin
     asserts:
       - matchSnapshot: {}
   - it: manifest should render deprecated accesstoken

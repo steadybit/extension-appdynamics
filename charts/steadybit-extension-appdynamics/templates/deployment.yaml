@@ -87,10 +87,6 @@ spec:
             - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
               value: {{ .Values.appdynamics.eventApplicationID | quote }}
             {{- end }}
-            {{- if .Values.appdynamics.eventApplicationID }}
-            - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
-              value: {{ .Values.appdynamics.eventApplicationID | quote }}
-            {{- end }}
             {{- if .Values.appdynamics.actionSuppressionTimezone }}
             - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
               value: {{ .Values.appdynamics.actionSuppressionTimezone | quote }}

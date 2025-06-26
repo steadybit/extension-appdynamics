@@ -789,6 +789,10 @@ manifest should render appdynamic settings:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: my-account-name
+                - name: STEADYBIT_EXTENSION_EVENT_APPLICATION_ID
+                  value: my-event-application-id
+                - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
+                  value: Europe/Berlin
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
