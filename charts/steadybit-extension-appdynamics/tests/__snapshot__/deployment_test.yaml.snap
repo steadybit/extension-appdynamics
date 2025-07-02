@@ -62,8 +62,8 @@ manifest should match snapshot using podAnnotations and Labels:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -142,8 +142,8 @@ manifest should match snapshot with TLS:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -234,8 +234,8 @@ manifest should match snapshot with extra env vars:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -316,8 +316,8 @@ manifest should match snapshot with extra labels:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -396,8 +396,8 @@ manifest should match snapshot with mutual TLS:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -490,8 +490,8 @@ manifest should match snapshot with mutual TLS using containerPaths:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -570,8 +570,8 @@ manifest should match snapshot with podSecurityContext:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -651,8 +651,8 @@ manifest should match snapshot with priority class:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -732,8 +732,8 @@ manifest should match snapshot without TLS:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -816,8 +816,8 @@ manifest should render appdynamic settings:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
@@ -892,8 +892,8 @@ manifest should render deprecated accesstoken:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
