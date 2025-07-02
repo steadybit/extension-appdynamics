@@ -898,8 +898,8 @@ manifest should render application filters:
                 timeoutSeconds: 1
               resources:
                 limits:
-                  cpu: 200m
-                  memory: 32Mi
+                  cpu: 250m
+                  memory: 128Mi
                 requests:
                   cpu: 50m
                   memory: 16Mi
