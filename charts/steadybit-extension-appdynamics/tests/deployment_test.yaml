@@ -94,3 +94,10 @@ tests:
       appdynamics.accessToken: x12345y
     asserts:
       - matchSnapshot: {}
+  - it: manifest should render application filters
+    set:
+      appdynamics.applicationFilter:
+        - "123"
+        - "456"
+    asserts:
+      - matchSnapshot: {}

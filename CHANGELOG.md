@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.1
+
+- Added an option to filter the discovery by a list of application ids.
+
+
 ## v1.1.0
 
 - Breaking change - The access token is a short-lived token - Authentication is now done via OAUTH2.0 client credentials flow

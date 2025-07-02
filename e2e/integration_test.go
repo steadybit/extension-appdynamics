@@ -41,6 +41,8 @@ func TestWithMinikube(t *testing.T) {
 				"--set", "appdynamics.apiClientName=test",
 				"--set", "appdynamics.apiClientSecret=x123",
 				"--set", "appdynamics.accountName=e2e",
+				"--set", "appdynamics.applicationFilter[0]=1",
+				"--set", "appdynamics.applicationFilter[1]=2",
 				"--set", "logging.level=trace",
 			}
 		},
@@ -110,6 +112,9 @@ func testDiscovery(t *testing.T, _ *e2e.Minikube, e *e2e.Extension) {
 
 	app, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.application", func(target discovery_kit_api.Target) bool {
 		return e2e.HasAttribute(target, "appdynamics.application.id", "1")
+	})
+	_, _ = e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.application", func(target discovery_kit_api.Target) bool {
+		return e2e.HasAttribute(target, "appdynamics.application.id", "2")
 	})
 	require.NoError(t, err)
 	healthrule, err := e2e.PollForTarget(ctx, e, "com.steadybit.extension_appdynamics.health-rule", func(target discovery_kit_api.Target) bool {

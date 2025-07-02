@@ -25,6 +25,7 @@ type Specification struct {
 	EventApplicationID                      string   `json:"eventApplicationID" split_words:"true" required:"false"`
 	ActionSuppressionTimezone               string   `json:"actionSuppressionTimezone" split_words:"true" required:"false"`
 	DiscoveryAttributesExcludesApplications []string `json:"discoveryAttributesExcludesApplications" split_words:"true" required:"false"`
+	ApplicationFilter                       []string `json:"applicationFilter" split_words:"true" required:"false"`
 }
 
 var (
@@ -43,5 +44,9 @@ func ValidateConfiguration() {
 		log.Warn().Msg("Setting up an access token is deprecated. Please use apiClientName, apiClientSecret and accountName instead.")
 	} else if Config.ApiClientName == "" || Config.ApiClientSecret == "" || Config.AccountName == "" {
 		log.Fatal().Msg("ApiClientName, ApiClientSecret and AccountName must be set in the configuration.")
+	}
+
+	if len(Config.ApplicationFilter) > 0 {
+		log.Info().Strs("ApplicationFilter", Config.ApplicationFilter).Msg("Using ApplicationFilter to limit the applications that are discovered. If you want to discover all applications, set ApplicationFilter to an empty list.")
 	}
 }

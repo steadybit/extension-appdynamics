@@ -16,6 +16,7 @@ import (
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
+	"k8s.io/utils/strings/slices"
 	"strconv"
 	"time"
 )
@@ -142,14 +143,18 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 	}
 
 	for _, app := range applications {
+		appId := strconv.Itoa(app.ID)
+		if len(config.Config.ApplicationFilter) > 0 && !slices.Contains(config.Config.ApplicationFilter, appId) {
+			continue
+		}
 		result = append(result, discovery_kit_api.Target{
-			Id:         strconv.Itoa(app.ID),
+			Id:         appId,
 			TargetType: applicationTargetType,
 			Label:      app.Name,
 			Attributes: map[string][]string{
 				AppAttribute + AppDescription: {app.Description},
 				AppAttribute + ".name":        {app.Name},
-				AppAttribute + ".id":          {strconv.Itoa(app.ID)},
+				AppAttribute + ".id":          {appId},
 				AppAttribute + AppAccountGUID: {app.AccountGUID},
 				AppAttribute + AppOrigin:      {config.Config.ApiBaseUrl},
 			}})

@@ -16,6 +16,7 @@ import (
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
+	"k8s.io/utils/strings/slices"
 	"strconv"
 	"time"
 )
@@ -157,6 +158,11 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 	}
 
 	for _, app := range applications {
+		appId := strconv.Itoa(app.ID)
+		if len(config.Config.ApplicationFilter) > 0 && !slices.Contains(config.Config.ApplicationFilter, appId) {
+			continue
+		}
+
 		res, err := client.R().
 			SetContext(ctx).
 			SetResult(&healthRules).

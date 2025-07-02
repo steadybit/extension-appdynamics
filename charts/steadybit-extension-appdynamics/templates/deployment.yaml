@@ -91,6 +91,10 @@ spec:
             - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
               value: {{ .Values.appdynamics.actionSuppressionTimezone | quote }}
             {{- end }}
+            {{- if .Values.appdynamics.applicationFilter }}
+            - name: STEADYBIT_EXTENSION_APPLICATION_FILTER
+              value: {{ join "," .Values.appdynamics.applicationFilter | quote }}
+            {{- end }}
           {{- with .Values.extraEnvFrom }}
           envFrom:
             {{- toYaml . | nindent 12 }}
