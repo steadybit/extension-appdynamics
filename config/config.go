@@ -25,6 +25,7 @@ type Specification struct {
 	EventApplicationID                      string   `json:"eventApplicationID" split_words:"true" required:"false"`
 	ActionSuppressionTimezone               string   `json:"actionSuppressionTimezone" split_words:"true" required:"false"`
 	DiscoveryAttributesExcludesApplications []string `json:"discoveryAttributesExcludesApplications" split_words:"true" required:"false"`
+	DiscoveryAttributesExcludesHealthRules  []string `json:"discoveryAttributesExcludesHealthRules" split_words:"true" required:"false"`
 	ApplicationFilter                       []string `json:"applicationFilter" split_words:"true" required:"false"`
 }
 

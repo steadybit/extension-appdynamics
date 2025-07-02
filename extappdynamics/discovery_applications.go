@@ -12,6 +12,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
+	"github.com/steadybit/discovery-kit/go/discovery_kit_commons"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
@@ -115,7 +116,7 @@ func (d *applicationDiscovery) DescribeAttributes() []discovery_kit_api.Attribut
 }
 
 func (d *applicationDiscovery) DiscoverTargets(ctx context.Context) ([]discovery_kit_api.Target, error) {
-	return getAllApplications(ctx, RestyClient), nil
+	return discovery_kit_commons.ApplyAttributeExcludes(getAllApplications(ctx, RestyClient), config.Config.DiscoveryAttributesExcludesApplications), nil
 }
 
 func getAllApplications(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {

@@ -12,6 +12,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
+	"github.com/steadybit/discovery-kit/go/discovery_kit_commons"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
@@ -131,7 +132,7 @@ func (d *healthRuleDiscovery) DescribeAttributes() []discovery_kit_api.Attribute
 }
 
 func (d *healthRuleDiscovery) DiscoverTargets(ctx context.Context) ([]discovery_kit_api.Target, error) {
-	return getAllHealthRules(ctx, RestyClient), nil
+	return discovery_kit_commons.ApplyAttributeExcludes(getAllHealthRules(ctx, RestyClient), config.Config.DiscoveryAttributesExcludesHealthRules), nil
 }
 
 func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_kit_api.Target {
