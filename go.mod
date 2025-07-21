@@ -22,7 +22,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/oauth2 v0.30.0
-	k8s.io/apimachinery v0.33.2
+	k8s.io/apimachinery v0.33.3
 	k8s.io/utils v0.0.0-20250502105355-0f33e8f1c979
 )
 
