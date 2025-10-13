@@ -21,7 +21,7 @@ require (
 	github.com/steadybit/extension-kit v1.10.0
 	github.com/stretchr/testify v1.11.1
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/oauth2 v0.31.0
+	golang.org/x/oauth2 v0.32.0
 	k8s.io/apimachinery v0.33.4
 	k8s.io/utils v0.0.0-20250502105355-0f33e8f1c979
 )
