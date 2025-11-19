@@ -1,9 +1,12 @@
 # Changelog
 
+## v1.1.2
+
+- Update dependencies
+
 ## v1.1.1
 
 - Added an option to filter the discovery by a list of application ids.
-
 
 ## v1.1.0
 
