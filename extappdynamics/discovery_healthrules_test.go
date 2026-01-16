@@ -9,6 +9,7 @@ import (
 
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/stretchr/testify/assert"
 )
 
