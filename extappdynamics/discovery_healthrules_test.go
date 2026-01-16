@@ -3,10 +3,11 @@ package extappdynamics
 
 import (
 	"context"
-	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/stretchr/testify/assert"
@@ -84,8 +85,8 @@ func TestHealthRuleDiscovery_DescribeTarget(t *testing.T) {
 	td := d.DescribeTarget()
 
 	assert.Equal(t, applicationHealthRuleTargetType, td.Id)
-	assert.Equal(t, "AppDynamics health-rule", td.Label.One)
-	assert.Equal(t, "AppDynamics health-rules", td.Label.Other)
+	assert.Equal(t, "AppDynamics Health Rule", td.Label.One)
+	assert.Equal(t, "AppDynamics Health Rules", td.Label.Other)
 	assert.NotNil(t, td.Category)
 	assert.Equal(t, "monitoring", *td.Category)
 	// should list exactly 5 columns
