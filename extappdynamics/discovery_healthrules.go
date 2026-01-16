@@ -59,7 +59,7 @@ func (d *healthRuleDiscovery) Describe() discovery_kit_api.DiscoveryDescription 
 func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescription {
 	return discovery_kit_api.TargetDescription{
 		Id:       applicationHealthRuleTargetType,
-		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics health-rule", Other: "AppDynamics health-rules"},
+		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics Health Rule", Other: "AppDynamics Health Rules"},
 		Category: extutil.Ptr("monitoring"),
 		Version:  extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:     extutil.Ptr(appDynamicsTargetIcon),
