@@ -10,16 +10,15 @@ package extappdynamics
 import (
 	"context"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"github.com/steadybit/action-kit/go/action_kit_api/v2"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/steadybit/action-kit/go/action_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	extension_kit "github.com/steadybit/extension-kit"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type HealthRuleStateCheckAction struct{}
@@ -66,8 +65,8 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 				},
 			}),
 		}),
-		Technology:  extutil.Ptr("AppDynamics"),
-		Category:    extutil.Ptr("monitoring"), //Can be removed in Q1/24 - support for backward compatibility of old sidebar
+		Technology: extutil.Ptr("AppDynamics"),
+
 		Kind:        action_kit_api.Check,
 		TimeControl: action_kit_api.TimeControlInternal,
 		Parameters: []action_kit_api.ActionParameter{
