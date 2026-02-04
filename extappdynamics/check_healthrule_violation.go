@@ -14,6 +14,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-resty/resty/v2"
+	"github.com/steadybit/action-kit/go/action_kit_api/v2"
 	"github.com/steadybit/action-kit/go/action_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	extension_kit "github.com/steadybit/extension-kit"
