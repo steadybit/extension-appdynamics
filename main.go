@@ -25,7 +25,6 @@ import (
 	"github.com/steadybit/extension-kit/extlogging"
 	"github.com/steadybit/extension-kit/extruntime"
 	"github.com/steadybit/extension-kit/extsignals"
-	_ "go.uber.org/automaxprocs" // Importing automaxprocs automatically adjusts GOMAXPROCS.
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"net/http"
