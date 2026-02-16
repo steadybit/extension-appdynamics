@@ -19,7 +19,7 @@ require (
 	github.com/steadybit/extension-kit v1.10.1
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/oauth2 v0.35.0
-	k8s.io/apimachinery v0.35.0
+	k8s.io/apimachinery v0.35.1
 	k8s.io/utils v0.0.0-20260108192941-914a6e750570
 )
 
