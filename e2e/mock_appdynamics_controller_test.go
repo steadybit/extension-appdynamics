@@ -9,6 +9,7 @@ package e2e
 
 import (
 	"fmt"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-appdynamics/extappdynamics"
 	"github.com/steadybit/extension-kit/exthttp"
@@ -44,7 +45,7 @@ func createMockAppDynamicsController() *mockServer {
 }
 
 func handler[T any](getter func() T) http.Handler {
-	return exthttp.PanicRecovery(exthttp.LogRequest(exthttp.GetterAsHandler(getter)))
+	return exthttp.PanicRecovery(exthttp.LogRequestWithDefaultLogLevel(exthttp.GetterAsHandler(getter), zerolog.DebugLevel))
 }
 
 func (m *mockServer) getToken() extappdynamics.TokenResponse {
