@@ -18,7 +18,7 @@ require (
 	github.com/steadybit/event-kit/go/event_kit_api v1.6.2
 	github.com/steadybit/extension-kit v1.10.3
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/oauth2 v0.35.0
+	golang.org/x/oauth2 v0.36.0
 	k8s.io/apimachinery v0.35.2
 	k8s.io/utils v0.0.0-20260108192941-914a6e750570
 )
