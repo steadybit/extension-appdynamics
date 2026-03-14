@@ -56,9 +56,9 @@ func main() {
 
 	if config.Config.EventApplicationID != "" {
 		extevents.RegisterEventListenerHandlers()
-
-		exthttp.RegisterHttpHandler("/", exthttp.IfNoneMatchHandler(func() string { return startedAt }, exthttp.GetterAsHandler(getExtensionList)))
 	}
+
+	exthttp.RegisterHttpHandler("/", exthttp.IfNoneMatchHandler(func() string { return startedAt }, exthttp.GetterAsHandler(getExtensionList)))
 
 	extsignals.ActivateSignalHandlers()
 
