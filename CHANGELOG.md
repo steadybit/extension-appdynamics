@@ -1,6 +1,6 @@
 # Changelog
 
-## (next)
+## v1.1.7
 
 - Support if-none-match for the extension list endpoint
 
