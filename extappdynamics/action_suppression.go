@@ -51,42 +51,42 @@ func (m *ActionSuppressionAction) Describe() action_kit_api.ActionDescription {
 		Label:       "Create Action Suppression",
 		Description: "Temporarily suspend the automatic trigger of actions and alerts by a policy in response to an event.",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:        extutil.Ptr(appDynamicsTargetIcon),
-		Technology:  extutil.Ptr("AppDynamics"),
-		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
+		Icon:        new(appDynamicsTargetIcon),
+		Technology:  new("AppDynamics"),
+		TargetSelection: new(action_kit_api.TargetSelection{
 			TargetType:          applicationTargetType,
 			QuantityRestriction: extutil.Ptr(action_kit_api.QuantityRestrictionAll),
-			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
+			SelectionTemplates: new([]action_kit_api.TargetSelectionTemplate{
 				{
 					Label: "by application name",
 					Query: "appdynamics.application.name=\"\"",
 				},
 			}),
 		}),
-		Category:    extutil.Ptr("monitoring"),
+		Category:    new("monitoring"),
 		Kind:        action_kit_api.Other,
 		TimeControl: action_kit_api.TimeControlExternal,
 		Parameters: []action_kit_api.ActionParameter{
 			{
 				Name:         "duration",
 				Label:        "Duration",
-				Description:  extutil.Ptr(""),
+				Description:  new(""),
 				Type:         action_kit_api.ActionParameterTypeDuration,
-				DefaultValue: extutil.Ptr("30s"),
-				Order:        extutil.Ptr(1),
-				Required:     extutil.Ptr(true),
+				DefaultValue: new("30s"),
+				Order:        new(1),
+				Required:     new(true),
 			},
 			{
 				Name:         "disableAgentReporting",
 				Label:        "Disable Agent Metric Reporting",
-				Description:  extutil.Ptr("Should the Agents defined in the scope report any metric data during the time window?"),
+				Description:  new("Should the Agents defined in the scope report any metric data during the time window?"),
 				Type:         action_kit_api.ActionParameterTypeBoolean,
-				DefaultValue: extutil.Ptr("false"),
-				Order:        extutil.Ptr(2),
-				Required:     extutil.Ptr(true),
+				DefaultValue: new("false"),
+				Order:        new(2),
+				Required:     new(true),
 			},
 		},
-		Stop: extutil.Ptr(action_kit_api.MutatingEndpointReference{}),
+		Stop: new(action_kit_api.MutatingEndpointReference{}),
 	}
 }
 
@@ -120,7 +120,7 @@ func ActionSuppressionStart(ctx context.Context, state *ActionSuppressionState, 
 	if config.Config.ActionSuppressionTimezone == "" {
 		tz, err := GetLocalTimezone()
 		if err != nil {
-			return nil, extutil.Ptr(extension_kit.ToError("Failed to get current timezone.", err))
+			return nil, new(extension_kit.ToError("Failed to get current timezone.", err))
 		}
 		timezone = tz
 	} else {
@@ -145,11 +145,11 @@ func ActionSuppressionStart(ctx context.Context, state *ActionSuppressionState, 
 		Post("/controller/alerting/rest/v1/applications/" + state.ApplicationId + "/action-suppressions")
 
 	if err != nil {
-		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("Failed to create action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to create action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
 	}
 
 	if !res.IsSuccess() {
-		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while creating action suppression for Application ID %s. Full response: %v", res.StatusCode(), state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while creating action suppression for Application ID %s. Full response: %v", res.StatusCode(), state.ApplicationId, res.String()), err))
 	}
 
 	return &action_kit_api.StartResult{
@@ -169,7 +169,7 @@ func ActionSuppressionStop(ctx context.Context, state *ActionSuppressionState, c
 		Delete("/controller/alerting/rest/v1/applications/" + state.ApplicationId + "/action-suppressions/" + *state.ActionSuppressionId)
 
 	if err != nil {
-		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("Failed to delete action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to delete action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
 	}
 
 	if !res.IsSuccess() {

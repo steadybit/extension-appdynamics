@@ -16,7 +16,6 @@ import (
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
-	"github.com/steadybit/extension-kit/extutil"
 	"k8s.io/utils/strings/slices"
 	"strconv"
 	"time"
@@ -51,7 +50,7 @@ func (d *healthRuleDiscovery) Describe() discovery_kit_api.DiscoveryDescription 
 	return discovery_kit_api.DiscoveryDescription{
 		Id: applicationHealthRuleTargetType,
 		Discover: discovery_kit_api.DescribingEndpointReferenceWithCallInterval{
-			CallInterval: extutil.Ptr("2m"),
+			CallInterval: new("2m"),
 		},
 	}
 }
@@ -60,9 +59,9 @@ func (d *healthRuleDiscovery) DescribeTarget() discovery_kit_api.TargetDescripti
 	return discovery_kit_api.TargetDescription{
 		Id:       applicationHealthRuleTargetType,
 		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics Health Rule", Other: "AppDynamics Health Rules"},
-		Category: extutil.Ptr("monitoring"),
+		Category: new("monitoring"),
 		Version:  extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:     extutil.Ptr(appDynamicsTargetIcon),
+		Icon:     new(appDynamicsTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
 				{Attribute: HealthRuleAttribute + ".name"},

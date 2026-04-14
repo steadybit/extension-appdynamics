@@ -16,7 +16,6 @@ import (
 	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
 	"github.com/steadybit/extension-appdynamics/config"
 	"github.com/steadybit/extension-kit/extbuild"
-	"github.com/steadybit/extension-kit/extutil"
 	"k8s.io/utils/strings/slices"
 	"strconv"
 	"time"
@@ -49,7 +48,7 @@ func (d *applicationDiscovery) Describe() discovery_kit_api.DiscoveryDescription
 	return discovery_kit_api.DiscoveryDescription{
 		Id: applicationTargetType,
 		Discover: discovery_kit_api.DescribingEndpointReferenceWithCallInterval{
-			CallInterval: extutil.Ptr("1m"),
+			CallInterval: new("1m"),
 		},
 	}
 }
@@ -58,9 +57,9 @@ func (d *applicationDiscovery) DescribeTarget() discovery_kit_api.TargetDescript
 	return discovery_kit_api.TargetDescription{
 		Id:       applicationTargetType,
 		Label:    discovery_kit_api.PluralLabel{One: "AppDynamics application", Other: "AppDynamics applications"},
-		Category: extutil.Ptr("monitoring"),
+		Category: new("monitoring"),
 		Version:  extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:     extutil.Ptr(appDynamicsTargetIcon),
+		Icon:     new(appDynamicsTargetIcon),
 		Table: discovery_kit_api.Table{
 			Columns: []discovery_kit_api.Column{
 				{Attribute: AppAttribute + ".name"},
