@@ -11,7 +11,6 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	actionapitest "github.com/steadybit/action-kit/go/action_kit_api/v2"
-	"github.com/steadybit/extension-kit/extutil"
 )
 
 func TestPrepareSuccess(t *testing.T) {
@@ -21,13 +20,13 @@ func TestPrepareSuccess(t *testing.T) {
 		Target: &actionapitest.Target{Attributes: map[string][]string{
 			"appdynamics.application.id": {"app-id-123"},
 		}},
-		Config: map[string]interface{}{
+		Config: map[string]any{
 			"duration":              float64(2000),
 			"disableAgentReporting": true,
 		},
 		ExecutionContext: &actionapitest.ExecutionContext{
-			ExperimentUri: extutil.Ptr("exp://example"),
-			ExecutionUri:  extutil.Ptr("exec://example"),
+			ExperimentUri: new("exp://example"),
+			ExecutionUri:  new("exec://example"),
 		},
 	}
 
@@ -57,7 +56,7 @@ func TestPrepareMissingApplicationID(t *testing.T) {
 	state := a.NewEmptyState()
 	req := actionapitest.PrepareActionRequestBody{
 		Target: &actionapitest.Target{Attributes: map[string][]string{}},
-		Config: map[string]interface{}{
+		Config: map[string]any{
 			"duration":              float64(1000),
 			"disableAgentReporting": false,
 		},
@@ -83,7 +82,7 @@ func TestActionSuppressionStartSuccess(t *testing.T) {
 			t.Errorf("failed to decode body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]interface{}{"id": 123})
+		json.NewEncoder(w).Encode(map[string]any{"id": 123})
 	}))
 	defer ts.Close()
 
@@ -143,7 +142,7 @@ func TestActionSuppressionStopSuccess(t *testing.T) {
 
 	state := ActionSuppressionState{
 		ApplicationId:       "app-123",
-		ActionSuppressionId: extutil.Ptr("123"),
+		ActionSuppressionId: new("123"),
 	}
 
 	res, err := ActionSuppressionStop(context.Background(), &state, RestyClient)

@@ -165,17 +165,15 @@ func TestGetStepTags_AllFields(t *testing.T) {
 		ExecutionId:   55,
 		ExperimentKey: "ek",
 		Type:          event_kit_api.Action,
-		ActionId:      ptrString("aid"),
-		ActionName:    ptrString("aname"),
-		CustomLabel:   ptrString("label"),
+		ActionId:      new("aid"),
+		ActionName:    new("aname"),
+		CustomLabel:   new("label"),
 	}
 	tags := getStepTags(exec)
 
 	assert.Contains(t, tags, KeyValue{Key: "propertynames", Value: "step_name"})
 	assert.Contains(t, tags, KeyValue{Key: "propertynames", Value: "step_label"})
 }
-
-func ptrString(s string) *string { return &s }
 
 // --- getTargetTags ---
 

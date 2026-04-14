@@ -55,19 +55,19 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 		Label:       "Health Rule Check",
 		Description: "Verify if an health rule is observing violations.",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:        extutil.Ptr(appDynamicsTargetIcon),
-		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
+		Icon:        new(appDynamicsTargetIcon),
+		TargetSelection: new(action_kit_api.TargetSelection{
 			TargetType:          applicationHealthRuleTargetType,
 			QuantityRestriction: extutil.Ptr(action_kit_api.QuantityRestrictionAll),
-			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
+			SelectionTemplates: new([]action_kit_api.TargetSelectionTemplate{
 				{
 					Label:       "Health Rule name",
-					Description: extutil.Ptr("Find health rule by name"),
+					Description: new("Find health rule by name"),
 					Query:       "appdynamics.health-rule.name=\"\"",
 				},
 			}),
 		}),
-		Technology: extutil.Ptr("AppDynamics"),
+		Technology: new("AppDynamics"),
 
 		Kind:        action_kit_api.Check,
 		TimeControl: action_kit_api.TimeControlInternal,
@@ -75,18 +75,18 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 			{
 				Name:         "duration",
 				Label:        "Duration",
-				Description:  extutil.Ptr(""),
+				Description:  new(""),
 				Type:         action_kit_api.ActionParameterTypeDuration,
-				DefaultValue: extutil.Ptr("30s"),
-				Order:        extutil.Ptr(1),
-				Required:     extutil.Ptr(true),
+				DefaultValue: new("30s"),
+				Order:        new(1),
+				Required:     new(true),
 			},
 			{
 				Name:        "violation",
 				Label:       "Expected State",
-				Description: extutil.Ptr("Does the health rule will observe some violations of critical or warning conditions?"),
+				Description: new("Does the health rule will observe some violations of critical or warning conditions?"),
 				Type:        action_kit_api.ActionParameterTypeString,
-				Options: extutil.Ptr([]action_kit_api.ParameterOption{
+				Options: new([]action_kit_api.ParameterOption{
 					action_kit_api.ExplicitParameterOption{
 						Label: "Violations expected",
 						Value: violationsExpected,
@@ -96,17 +96,17 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 						Value: noViolationsExpected,
 					},
 				}),
-				DefaultValue: extutil.Ptr(violationsExpected),
-				Required:     extutil.Ptr(true),
-				Order:        extutil.Ptr(2),
+				DefaultValue: new(violationsExpected),
+				Required:     new(true),
+				Order:        new(2),
 			},
 			{
 				Name:         "stateCheckMode",
 				Label:        "State Check Mode",
-				Description:  extutil.Ptr("How often should the state be checked ?"),
+				Description:  new("How often should the state be checked ?"),
 				Type:         action_kit_api.ActionParameterTypeString,
-				DefaultValue: extutil.Ptr(StateCheckModeAllTheTime),
-				Options: extutil.Ptr([]action_kit_api.ParameterOption{
+				DefaultValue: new(StateCheckModeAllTheTime),
+				Options: new([]action_kit_api.ParameterOption{
 					action_kit_api.ExplicitParameterOption{
 						Label: "All the time",
 						Value: StateCheckModeAllTheTime,
@@ -116,11 +116,11 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 						Value: StateCheckModeAtLeastOnce,
 					},
 				}),
-				Required: extutil.Ptr(true),
-				Order:    extutil.Ptr(3),
+				Required: new(true),
+				Order:    new(3),
 			},
 		},
-		Widgets: extutil.Ptr([]action_kit_api.Widget{
+		Widgets: new([]action_kit_api.Widget{
 			action_kit_api.StateOverTimeWidget{
 				Type:  action_kit_api.ComSteadybitWidgetStateOverTime,
 				Title: "AppDynamics Health Rule State",
@@ -136,16 +136,16 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 				Tooltip: action_kit_api.StateOverTimeWidgetTooltipConfig{
 					From: "tooltip",
 				},
-				Url: extutil.Ptr(action_kit_api.StateOverTimeWidgetUrlConfig{
-					From: extutil.Ptr("url"),
+				Url: new(action_kit_api.StateOverTimeWidgetUrlConfig{
+					From: new("url"),
 				}),
-				Value: extutil.Ptr(action_kit_api.StateOverTimeWidgetValueConfig{
-					Hide: extutil.Ptr(true),
+				Value: new(action_kit_api.StateOverTimeWidgetValueConfig{
+					Hide: new(true),
 				}),
 			},
 		}),
-		Status: extutil.Ptr(action_kit_api.MutatingEndpointReferenceWithCallInterval{
-			CallInterval: extutil.Ptr("1s"),
+		Status: new(action_kit_api.MutatingEndpointReferenceWithCallInterval{
+			CallInterval: new("1s"),
 		}),
 	}
 }
@@ -154,7 +154,7 @@ func (m *HealthRuleStateCheckAction) Prepare(_ context.Context, state *HealthRul
 	now := time.Now()
 	HealthRuleId := request.Target.Attributes[HealthRuleAttribute+".id"]
 	if len(HealthRuleId) == 0 {
-		return nil, extutil.Ptr(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.id' attribute.", nil))
+		return nil, new(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.id' attribute.", nil))
 	}
 	state.HealthRuleId = HealthRuleId[0]
 
@@ -204,11 +204,11 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 		Get(uri)
 
 	if err != nil {
-		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("Failed to retrieve health rules from AppDynamics for Application ID %s. Full response: %v", state.HealthRuleApplication, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to retrieve health rules from AppDynamics for Application ID %s. Full response: %v", state.HealthRuleApplication, res.String()), err))
 	}
 
 	if !res.IsSuccess() {
-		return nil, extutil.Ptr(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), err))
 	}
 
 	var checkError *action_kit_api.ActionKitError
@@ -216,7 +216,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 
 	if state.StateCheckMode == StateCheckModeAllTheTime {
 		if !state.IsViolationExpected == healthRuleHasViolations {
-			checkError = extutil.Ptr(action_kit_api.ActionKitError{
+			checkError = new(action_kit_api.ActionKitError{
 				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t'.",
 					state.HealthRuleName,
 					healthRuleHasViolations,
@@ -229,7 +229,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 			state.StateCheckSuccess = true
 		}
 		if completed && !state.StateCheckSuccess {
-			checkError = extutil.Ptr(action_kit_api.ActionKitError{
+			checkError = new(action_kit_api.ActionKitError{
 				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t' was expected once.",
 					state.HealthRuleName,
 					healthRuleHasViolations,
@@ -246,7 +246,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	return &action_kit_api.StatusResult{
 		Completed: completed,
 		Error:     checkError,
-		Metrics:   extutil.Ptr(metrics),
+		Metrics:   new(metrics),
 	}, nil
 }
 
@@ -266,8 +266,8 @@ func toMetric(healthRuleID string, healthRuleName string, appID string, violatio
 		url = fmt.Sprintf("%s/controller/#/location=APP_INCIDENT_DETAIL_MODAL&timeRange=last_1_hour.BEFORE_NOW.-1.-1.60&application=%s&incident=%d&incidentTime=%s", strings.TrimRight(config.Config.ApiBaseUrl, "/"), appID, violation.ID, strconv.FormatInt(now.UnixMilli(), 10))
 	}
 
-	return extutil.Ptr(action_kit_api.Metric{
-		Name: extutil.Ptr("appdynamics_health_rule_state"),
+	return new(action_kit_api.Metric{
+		Name: new("appdynamics_health_rule_state"),
 		Metric: map[string]string{
 			HealthRuleAttribute + ".id":   healthRuleID,
 			HealthRuleAttribute + ".name": healthRuleName,
