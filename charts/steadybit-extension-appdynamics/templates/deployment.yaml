@@ -56,6 +56,7 @@ spec:
               memory: {{ .Values.resources.limits.memory }}
               cpu: {{ .Values.resources.limits.cpu }}
           env:
+            {{- include "extensionlib.deployment.env" (list .) | nindent 12 }}
             {{- if .Values.discovery.attributes.excludes.application }}
             - name: STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_APPLICATIONS
               value: {{ join "," .Values.discovery.attributes.excludes.application | quote }}
