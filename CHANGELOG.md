@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.11
+
+- chore(deps): bump alpine from 3.23 to 3.24
+- chore(deps): bump k8s.io/apimachinery from 0.36.1 to 0.36.2
+
 ## v1.1.10
 
 - chore: update to go 1.26.4
