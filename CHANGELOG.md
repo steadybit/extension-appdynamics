@@ -2,7 +2,6 @@
 
 ## v1.1.13
 
-- build: rename workflow_dispatch input labels for the GH UI
 - chore(deps): bump github.com/steadybit/extension-kit
 
 ## v1.1.12
