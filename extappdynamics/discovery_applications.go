@@ -130,7 +130,7 @@ func getAllApplications(ctx context.Context, client *resty.Client) []discovery_k
 		Get("/controller/rest/applications?output=JSON")
 
 	if err != nil {
-		log.Err(err).Msgf("Failed to retrieve applications from AppDynamics. Full response: %v", res.String())
+		log.Err(err).Msg("Failed to retrieve applications from AppDynamics.")
 		return result
 	}
 

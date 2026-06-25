@@ -111,6 +111,14 @@ func TestActionSuppressionStartSuccess(t *testing.T) {
 	if receivedReq.DisableAgentReporting != true {
 		t.Errorf("expected DisableAgentReporting true")
 	}
+
+	// The suppression id from the response must be captured so Stop can delete it again.
+	if state.ActionSuppressionId == nil {
+		t.Fatal("expected ActionSuppressionId to be set after start, got nil")
+	}
+	if *state.ActionSuppressionId != "123" {
+		t.Errorf("expected ActionSuppressionId '123', got %q", *state.ActionSuppressionId)
+	}
 }
 
 func TestActionSuppressionStopNoID(t *testing.T) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- fix: the "Create Action Suppression" action now captures the created suppression id, so it is actually deleted again on stop instead of leaving AppDynamics alerting suppressed indefinitely
+- fix: guard the health-rule check against missing target attributes instead of panicking, and avoid a possible nil-dereference when an AppDynamics API request fails before a response is received
+
 ## v1.1.13
 
 - chore(deps): bump github.com/steadybit/extension-kit

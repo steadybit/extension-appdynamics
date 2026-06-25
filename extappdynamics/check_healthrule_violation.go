@@ -171,8 +171,17 @@ func (m *HealthRuleStateCheckAction) Prepare(_ context.Context, state *HealthRul
 		stateCheckMode = fmt.Sprintf("%v", request.Config["stateCheckMode"])
 	}
 
-	state.HealthRuleName = request.Target.Attributes["appdynamics.health-rule.name"][0]
-	state.HealthRuleApplication = request.Target.Attributes["appdynamics.health-rule.application.id"][0]
+	healthRuleName := request.Target.Attributes["appdynamics.health-rule.name"]
+	if len(healthRuleName) == 0 {
+		return nil, new(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.name' attribute.", nil))
+	}
+	healthRuleApplication := request.Target.Attributes["appdynamics.health-rule.application.id"]
+	if len(healthRuleApplication) == 0 {
+		return nil, new(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.application.id' attribute.", nil))
+	}
+
+	state.HealthRuleName = healthRuleName[0]
+	state.HealthRuleApplication = healthRuleApplication[0]
 	state.End = end
 	state.IsViolationExpected = expectedViolation
 	state.StateCheckMode = stateCheckMode
@@ -204,11 +213,11 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 		Get(uri)
 
 	if err != nil {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to retrieve health rules from AppDynamics for Application ID %s. Full response: %v", state.HealthRuleApplication, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to retrieve health rules from AppDynamics for Application ID %s.", state.HealthRuleApplication), err))
 	}
 
 	if !res.IsSuccess() {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), nil))
 	}
 
 	var checkError *action_kit_api.ActionKitError

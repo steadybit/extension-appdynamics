@@ -145,7 +145,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 		Get("/controller/rest/applications?output=JSON")
 
 	if err != nil {
-		log.Err(err).Msgf("Failed to retrieve applications from AppDynamics. Full response: %v", res.String())
+		log.Err(err).Msg("Failed to retrieve applications from AppDynamics.")
 		return result
 	}
 
@@ -169,7 +169,7 @@ func getAllHealthRules(ctx context.Context, client *resty.Client) []discovery_ki
 			Get("/controller/alerting/rest/v1/applications/" + strconv.Itoa(app.ID) + "/health-rules?output=JSON")
 
 		if err != nil {
-			log.Err(err).Msgf("Failed to retrieve health rules from AppDynamics with application %d. Full response: %v", app.ID, res.String())
+			log.Err(err).Msgf("Failed to retrieve health rules from AppDynamics with application %d.", app.ID)
 			return result
 		}
 
