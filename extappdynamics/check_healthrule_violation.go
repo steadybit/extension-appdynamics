@@ -217,7 +217,7 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 	}
 
 	if !res.IsSuccess() {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while retrieving health rule violations for Application ID %s. Full response: %v", res.StatusCode(), state.HealthRuleApplication, res.String()), nil))
 	}
 
 	var checkError *action_kit_api.ActionKitError
