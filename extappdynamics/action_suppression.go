@@ -17,6 +17,7 @@ import (
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extutil"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -141,16 +142,20 @@ func ActionSuppressionStart(ctx context.Context, state *ActionSuppressionState, 
 	res, err := client.R().
 		SetContext(ctx).
 		SetBody(actionSuppressionRequest).
-		SetResult(&ActionSuppressionResponse{}).
+		SetResult(&actionSuppressionResponse).
 		Post("/controller/alerting/rest/v1/applications/" + state.ApplicationId + "/action-suppressions")
 
+	// resty returns a nil/empty response when err != nil, so res.String() is only safe to
+	// read on the !IsSuccess() path below where err is nil and res is guaranteed non-nil.
 	if err != nil {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to create action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to create action suppression in AppDynamics for Application ID %s.", state.ApplicationId), err))
 	}
 
 	if !res.IsSuccess() {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while creating action suppression for Application ID %s. Full response: %v", res.StatusCode(), state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while creating action suppression for Application ID %s. Full response: %v", res.StatusCode(), state.ApplicationId, res.String()), nil))
 	}
+
+	state.ActionSuppressionId = extutil.Ptr(strconv.Itoa(actionSuppressionResponse.ID))
 
 	return &action_kit_api.StartResult{
 		Messages: &action_kit_api.Messages{
@@ -169,7 +174,7 @@ func ActionSuppressionStop(ctx context.Context, state *ActionSuppressionState, c
 		Delete("/controller/alerting/rest/v1/applications/" + state.ApplicationId + "/action-suppressions/" + *state.ActionSuppressionId)
 
 	if err != nil {
-		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to delete action suppression in AppDynamics for Application ID %s. Full response: %v", state.ApplicationId, res.String()), err))
+		return nil, new(extension_kit.ToError(fmt.Sprintf("Failed to delete action suppression in AppDynamics for Application ID %s.", state.ApplicationId), err))
 	}
 
 	if !res.IsSuccess() {
