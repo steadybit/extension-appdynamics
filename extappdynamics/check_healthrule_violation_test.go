@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -64,6 +65,7 @@ func TestHealthRuleCheckStatus_NoViolations_AllTheTime(t *testing.T) {
 // TestHealthRuleCheckStatus_ViolationsUnexpected_AllTheTime tests AllTheTime mode when a violation occurs but none are expected.
 func TestHealthRuleCheckStatus_ViolationsUnexpected_AllTheTime(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`[{"name":"foo"}]`))
 	}))
@@ -76,6 +78,7 @@ func TestHealthRuleCheckStatus_ViolationsUnexpected_AllTheTime(t *testing.T) {
 		End:                   time.Now().Add(-time.Second),
 		IsViolationExpected:   false,
 		StateCheckMode:        StateCheckModeAllTheTime,
+		FailEarly:             true,
 	}
 
 	res, err := HealthRuleCheckStatus(context.Background(), &state, client)
@@ -84,6 +87,55 @@ func TestHealthRuleCheckStatus_ViolationsUnexpected_AllTheTime(t *testing.T) {
 	}
 	if !res.Completed {
 		t.Error("expected Completed to be true")
+	}
+	if res.Error == nil {
+		t.Error("expected an error because an unexpected violation occurred")
+	}
+}
+
+// TestHealthRuleCheckStatus_AllTheTime_FailAtEnd verifies that with fail early disabled the deviation is
+// reported only once the step ends, using the past-tense message.
+func TestHealthRuleCheckStatus_AllTheTime_FailAtEnd(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`[{"name":"foo"}]`))
+	}))
+	defer ts.Close()
+
+	client := resty.New().SetHostURL(ts.URL)
+
+	// Not yet completed: a deviation is observed but must not fail early.
+	state := HealthRuleCheckState{
+		HealthRuleName:        "foo",
+		HealthRuleApplication: "app",
+		End:                   time.Now().Add(time.Minute),
+		IsViolationExpected:   false,
+		StateCheckMode:        StateCheckModeAllTheTime,
+		FailEarly:             false,
+	}
+	res, err := HealthRuleCheckStatus(context.Background(), &state, client)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if res.Error != nil {
+		t.Error("expected no error before the step ends (fail early disabled)")
+	}
+	if !state.DeviationSeen {
+		t.Error("expected the deviation to be remembered")
+	}
+
+	// Completed: the remembered deviation is reported with the past-tense message.
+	state.End = time.Now().Add(-time.Second)
+	res, err = HealthRuleCheckStatus(context.Background(), &state, client)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if res.Error == nil {
+		t.Fatal("expected an error at the end of the step")
+	}
+	if !strings.Contains(res.Error.Title, "had violations") {
+		t.Errorf("expected past-tense message, got %q", res.Error.Title)
 	}
 }
 
