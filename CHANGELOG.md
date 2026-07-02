@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add a "Fail early" option to the health rule check. When enabled (the default, matching the previous behavior), the check fails as soon as a deviating state is observed. When disabled, the check keeps collecting events for the whole duration and only fails at the end of the step (with a past-tense message, since the state may have recovered by then).
 - fix: the "Create Action Suppression" action now captures the created suppression id, so it is actually deleted again on stop instead of leaving AppDynamics alerting suppressed indefinitely
 - fix: guard the health-rule check against missing target attributes instead of panicking, and avoid a possible nil-dereference when an AppDynamics API request fails before a response is received
 

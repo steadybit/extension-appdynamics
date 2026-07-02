@@ -39,6 +39,11 @@ type HealthRuleCheckState struct {
 	IsViolationExpected   bool
 	StateCheckMode        string
 	StateCheckSuccess     bool
+	FailEarly             bool
+	// DeviationSeen and DeviationTitle are used in 'fail at end' mode (FailEarly = false) to remember
+	// that a deviating state was observed during the step so the failure can be reported once the step ends.
+	DeviationSeen  bool
+	DeviationTitle string
 }
 
 func NewHealthRuleStateCheckAction() action_kit_sdk.Action[HealthRuleCheckState] {
@@ -119,6 +124,16 @@ func (m *HealthRuleStateCheckAction) Describe() action_kit_api.ActionDescription
 				Required: new(true),
 				Order:    new(3),
 			},
+			{
+				Name:         "failEarly",
+				Label:        "Fail early",
+				Description:  new("If enabled, the check fails as soon as a deviating state is observed. If disabled, the check keeps collecting events for the whole duration and only fails at the end of the step. Only affects the 'All the time' mode; 'At least once' can only be evaluated at the end of the step."),
+				Type:         action_kit_api.Boolean,
+				DefaultValue: new("true"),
+				Advanced:     new(true),
+				Required:     new(false),
+				Order:        new(4),
+			},
 		},
 		Widgets: new([]action_kit_api.Widget{
 			action_kit_api.StateOverTimeWidget{
@@ -180,6 +195,12 @@ func (m *HealthRuleStateCheckAction) Prepare(_ context.Context, state *HealthRul
 		return nil, new(extension_kit.ToError("Target is missing the 'appdynamics.health-rule.application.id' attribute.", nil))
 	}
 
+	// Default to failing early to preserve the previous behavior for experiments that don't set this parameter.
+	state.FailEarly = true
+	if request.Config["failEarly"] != nil {
+		state.FailEarly = extutil.ToBool(request.Config["failEarly"])
+	}
+
 	state.HealthRuleName = healthRuleName[0]
 	state.HealthRuleApplication = healthRuleApplication[0]
 	state.End = end
@@ -225,11 +246,28 @@ func HealthRuleCheckStatus(ctx context.Context, state *HealthRuleCheckState, cli
 
 	if state.StateCheckMode == StateCheckModeAllTheTime {
 		if !state.IsViolationExpected == healthRuleHasViolations {
-			checkError = new(action_kit_api.ActionKitError{
-				Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t'.",
+			if state.FailEarly {
+				// Fail as soon as a deviating state is observed (present tense - it is deviating now).
+				checkError = new(action_kit_api.ActionKitError{
+					Title: fmt.Sprintf("HealthRule '%s' has violations '%t' whereas 'Violations Expected: %t'.",
+						state.HealthRuleName,
+						healthRuleHasViolations,
+						state.IsViolationExpected),
+					Status: extutil.Ptr(action_kit_api.Failed),
+				})
+			} else {
+				// Keep collecting events and remember the deviation to report it at the end of the
+				// step (past tense - the state may have recovered by the time this is reported).
+				state.DeviationSeen = true
+				state.DeviationTitle = fmt.Sprintf("HealthRule '%s' had violations '%t' whereas 'Violations Expected: %t'.",
 					state.HealthRuleName,
 					healthRuleHasViolations,
-					state.IsViolationExpected),
+					state.IsViolationExpected)
+			}
+		}
+		if !state.FailEarly && completed && state.DeviationSeen {
+			checkError = new(action_kit_api.ActionKitError{
+				Title:  state.DeviationTitle,
 				Status: extutil.Ptr(action_kit_api.Failed),
 			})
 		}
