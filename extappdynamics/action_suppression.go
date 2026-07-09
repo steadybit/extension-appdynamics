@@ -155,7 +155,7 @@ func ActionSuppressionStart(ctx context.Context, state *ActionSuppressionState, 
 		return nil, new(extension_kit.ToError(fmt.Sprintf("AppDynamics API responded with unexpected status code %d while creating action suppression for Application ID %s. Full response: %v", res.StatusCode(), state.ApplicationId, res.String()), nil))
 	}
 
-	state.ActionSuppressionId = extutil.Ptr(strconv.Itoa(actionSuppressionResponse.ID))
+	state.ActionSuppressionId = new(strconv.Itoa(actionSuppressionResponse.ID))
 
 	return &action_kit_api.StartResult{
 		Messages: &action_kit_api.Messages{
