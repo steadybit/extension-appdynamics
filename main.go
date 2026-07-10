@@ -11,7 +11,6 @@ import (
 	"net/http"
 	_ "net/http/pprof" //allow pprof
 	"strings"
-	"time"
 
 	_ "github.com/KimMachineGun/automemlimit" // By default, it sets `GOMEMLIMIT` to 90% of cgroup's memory limit.
 	"github.com/go-resty/resty/v2"
@@ -33,8 +32,6 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
-
-var startedAt = time.Now().Format(time.RFC3339)
 
 func main() {
 	extlogging.InitZeroLog()
@@ -58,7 +55,7 @@ func main() {
 		extevents.RegisterEventListenerHandlers()
 	}
 
-	exthttp.RegisterHttpHandler("/", exthttp.IfNoneMatchHandler(func() string { return startedAt }, exthttp.GetterAsHandler(getExtensionList)))
+	exthttp.RegisterRevisionedHandler("/", getExtensionList)
 
 	extsignals.ActivateSignalHandlers()
 
