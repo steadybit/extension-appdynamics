@@ -1,10 +1,22 @@
 # Changelog
 
-## Unreleased
+## v1.1.14
 
 - Add a "Fail early" option to the health rule check. When enabled (the default, matching the previous behavior), the check fails as soon as a deviating state is observed. When disabled, the check keeps collecting events for the whole duration and only fails at the end of the step (with a past-tense message, since the state may have recovered by then).
-- fix: the "Create Action Suppression" action now captures the created suppression id, so it is actually deleted again on stop instead of leaving AppDynamics alerting suppressed indefinitely
+- chore(deps): bump github.com/steadybit/action-kit/go/action_kit_sdk
+- chore(deps): bump github.com/steadybit/discovery-kit/go/discovery_kit_sdk
+- chore(deps): bump github.com/steadybit/event-kit/go/event_kit_api
+- chore(deps): bump github.com/steadybit/extension-kit
+- chore(deps): bump go to 1.26.5 (#71)
+- chore: add Claude Code workflows (#63)
+- chore: normalize dependabot-auto-merge workflow to the standard version (#66)
+- chore: silence SonarQube finding on secrets: inherit in Claude workflows
+- ci: skip build on .trivyignore.yml-only changes [skip ci]
+- feat(health rule check): add fail early option (#65)
+- fix: actually apply and lift AppDynamics action suppression (#64)
 - fix: guard the health-rule check against missing target attributes instead of panicking, and avoid a possible nil-dereference when an AppDynamics API request fails before a response is received
+- fix: the "Create Action Suppression" action now captures the created suppression id, so it is actually deleted again on stop instead of leaving AppDynamics alerting suppressed indefinitely
+- refactor: register extension index via exthttp.RegisterRevisionedHandler (#72)
 
 ## v1.1.13
 
