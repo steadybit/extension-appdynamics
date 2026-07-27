@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.15
+
+- chore(deps): bump k8s.io/apimachinery from 0.36.2 to 0.36.3
+
 ## v1.1.14
 
 - Add a "Fail early" option to the health rule check. When enabled (the default, matching the previous behavior), the check fails as soon as a deviating state is observed. When disabled, the check keeps collecting events for the whole duration and only fails at the end of the step (with a past-tense message, since the state may have recovered by then).
