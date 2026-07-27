@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.16
+
+- chore(deps): update dependencies
+
 ## v1.1.15
 
 - chore(deps): bump k8s.io/apimachinery from 0.36.2 to 0.36.3
