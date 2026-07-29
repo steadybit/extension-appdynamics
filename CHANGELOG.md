@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- fix: remove the "monitoring" category from the "Create Action Suppression" action so both actions are grouped consistently in the experiment editor
+
 ## v1.1.16
 
 - chore(deps): update dependencies
