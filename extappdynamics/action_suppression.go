@@ -64,7 +64,6 @@ func (m *ActionSuppressionAction) Describe() action_kit_api.ActionDescription {
 				},
 			}),
 		}),
-		Category:    new("monitoring"),
 		Kind:        action_kit_api.Other,
 		TimeControl: action_kit_api.TimeControlExternal,
 		Parameters: []action_kit_api.ActionParameter{
