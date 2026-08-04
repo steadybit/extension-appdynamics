@@ -90,13 +90,15 @@ func testHealthRuleCheck(hasViolation bool, appID string, wantedActionStatus act
 		}{Duration: 1_000, Violation: hasViolation, StateCheckMode: extappdynamics.StateCheckModeAllTheTime}
 
 		action, err := e.RunAction("com.steadybit.extension_appdynamics.health-rule.check", target, config, &action_kit_api.ExecutionContext{})
-		require.NoError(t, err)
 		defer func() { _ = action.Cancel() }()
 
-		err = action.Wait()
 		if wantedActionStatus == "" {
 			require.NoError(t, err)
+			err = action.Wait()
+			require.NoError(t, err)
 		} else {
+			// The check now fails as soon as Start() observes the deviating state, so the error
+			// surfaces from RunAction() rather than from Wait().
 			require.ErrorContains(t, err, string(wantedActionStatus))
 		}
 	}
