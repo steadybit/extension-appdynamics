@@ -210,8 +210,17 @@ func (m *HealthRuleStateCheckAction) Prepare(_ context.Context, state *HealthRul
 	return nil, nil
 }
 
-func (m *HealthRuleStateCheckAction) Start(_ context.Context, _ *HealthRuleCheckState) (*action_kit_api.StartResult, error) {
-	return nil, nil
+func (m *HealthRuleStateCheckAction) Start(ctx context.Context, state *HealthRuleCheckState) (*action_kit_api.StartResult, error) {
+	statusResult, err := HealthRuleCheckStatus(ctx, state, RestyClient)
+	if statusResult == nil {
+		return nil, err
+	}
+	return &action_kit_api.StartResult{
+		Artifacts: statusResult.Artifacts,
+		Error:     statusResult.Error,
+		Messages:  statusResult.Messages,
+		Metrics:   statusResult.Metrics,
+	}, err
 }
 
 func (m *HealthRuleStateCheckAction) Status(ctx context.Context, state *HealthRuleCheckState) (*action_kit_api.StatusResult, error) {
