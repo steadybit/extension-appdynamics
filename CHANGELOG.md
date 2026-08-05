@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased
+## v1.1.17
 
+- feat: support filtering targets out of discovery
+- fix: emit the health rule state metric immediately on Start (#75)
+- fix: remove 'monitoring' category from suppression action for consistent grouping
 - fix: remove the "monitoring" category from the "Create Action Suppression" action so both actions are grouped consistently in the experiment editor
 
 ## v1.1.16
