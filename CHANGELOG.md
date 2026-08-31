@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.20
+
+- chore(deps): bump k8s.io/apimachinery from 0.36.4 to 0.37.0
+
 ## v1.1.19
 
 - chore(deps): bump github.com/steadybit/action-kit/go/action_kit_test
