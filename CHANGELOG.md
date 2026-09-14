@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.21
+
+- chore(deps): bump github.com/KimMachineGun/automemlimit from 0.7.5 to 1.0.0
+- chore(deps): bump github.com/steadybit/action-kit/go/action_kit_test from 1.4.9 to 1.4.10
+- chore(deps): bump golang.org/x/oauth2 from 0.36.0 to 0.37.0
+
 ## v1.1.20
 
 - chore(deps): bump k8s.io/apimachinery from 0.36.4 to 0.37.0
