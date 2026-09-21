@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## v1.1.22
 
-- fix: refuse to start when a required parameter is set but empty
+- Add OpenTelemetry tracing support
+- Refuse to start when a required parameter is set but empty
+- Update dependencies
 
 ## v1.1.21
 
