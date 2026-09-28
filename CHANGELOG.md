@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.23
+
+- chore(deps): bump github.com/steadybit/action-kit/go/action_kit_test
+- chore(deps): bump k8s.io/apimachinery from 0.37.0 to 0.37.1
+
 ## v1.1.22
 
 - Add OpenTelemetry tracing support
