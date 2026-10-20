@@ -21,6 +21,8 @@ appdynamics:
   # appdynamics.applicationFilter -- List of Application IDs that should be reported by the extension. If not set, all applications will be discovered.
   # Example: ["162231", "162232", "162233"]
   applicationFilter: []
+  # appdynamics.insecureSkipVerify -- If true, the extension will skip TLS certificate verification when connecting to AppDynamics (e.g. for self-signed certificates). Prefer mounting your CA, see README.
+  insecureSkipVerify: false
 
 
 image:
@@ -153,6 +155,20 @@ extraEnv: []
 #  - secretRef:
 #    name: env-secrets
 extraEnvFrom: []
+
+# extraVolumeMounts -- Additional volumeMounts to add to the container, e.g. to mount custom CA certificates
+# extraVolumeMounts:
+#   - name: extra-certs
+#     mountPath: /etc/ssl/extra-certs
+#     readOnly: true
+extraVolumeMounts: []
+
+# extraVolumes -- Additional volumes to add to the pod
+# extraVolumes:
+#   - name: extra-certs
+#     configMap:
+#       name: appdynamics-self-signed-ca
+extraVolumes: []
 
 discovery:
   # discovery.group -- Optional group identifier. When set, the extension adds steadybit.group=<value> to every discovered target. Used as an additional matcher in enrichment rules.

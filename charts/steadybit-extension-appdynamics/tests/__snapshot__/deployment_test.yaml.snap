@@ -43,6 +43,8 @@ manifest should match snapshot using podAnnotations and Labels:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -131,6 +133,8 @@ manifest should match snapshot with TLS:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -179,6 +183,100 @@ manifest should match snapshot with TLS:
               secret:
                 optional: false
                 secretName: server-cert
+manifest should match snapshot with custom certificates and insecureSkipVerify:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        steadybit.com/discovery-disabled: "true"
+        steadybit.com/extension: "true"
+      name: RELEASE-NAME-steadybit-extension-appdynamics
+      namespace: NAMESPACE
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: RELEASE-NAME
+          app.kubernetes.io/name: steadybit-extension-appdynamics
+      template:
+        metadata:
+          annotations:
+            oneagent.dynatrace.com/injection: "false"
+          labels:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: steadybit-extension-appdynamics
+            steadybit.com/discovery-disabled: "true"
+            steadybit.com/extension: "true"
+        spec:
+          containers:
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
+                - name: STEADYBIT_EXTENSION_API_BASE_URL
+                  value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_NAME
+                  value: ""
+                - name: STEADYBIT_EXTENSION_API_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiClientSecret
+                      name: steadybit-extension-appdynamics
+                - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
+                  value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "true"
+                - name: SSL_CERT_DIR
+                  value: /etc/ssl/extra-certs:/etc/ssl/certs
+              image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health/liveness
+                  port: 8084
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 5
+              name: extension
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health/readiness
+                  port: 8084
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  cpu: 250m
+                  memory: 128Mi
+                requests:
+                  cpu: 50m
+                  memory: 16Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - mountPath: /etc/ssl/extra-certs
+                  name: extra-certs
+                  readOnly: true
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: steadybit-extension-appdynamics
+          volumes:
+            - configMap:
+                name: appdynamics-self-signed-ca
+              name: extra-certs
 manifest should match snapshot with custom image registry:
   1: |
     apiVersion: apps/v1
@@ -222,6 +320,8 @@ manifest should match snapshot with custom image registry:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: my-registry.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -306,6 +406,10 @@ manifest should match snapshot with extra env vars:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
+                - name: FOO
+                  value: bar
               envFrom:
                 - configMapRef: null
                   name: env-configmap
@@ -397,6 +501,8 @@ manifest should match snapshot with extra labels:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -481,6 +587,8 @@ manifest should match snapshot with global image pull secrets:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -567,6 +675,8 @@ manifest should match snapshot with global image registry:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: corp-registry.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -651,6 +761,8 @@ manifest should match snapshot with global priority class:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -736,6 +848,8 @@ manifest should match snapshot with image pull secrets:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -822,6 +936,8 @@ manifest should match snapshot with legacy image name containing registry:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -912,6 +1028,8 @@ manifest should match snapshot with mutual TLS:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1016,6 +1134,8 @@ manifest should match snapshot with mutual TLS using containerPaths:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1100,6 +1220,8 @@ manifest should match snapshot with podSecurityContext:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1185,6 +1307,8 @@ manifest should match snapshot with priority class:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1270,6 +1394,8 @@ manifest should match snapshot without TLS:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_ACCOUNT_NAME
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1358,6 +1484,8 @@ manifest should render appdynamic settings:
                   value: my-event-application-id
                 - name: STEADYBIT_EXTENSION_ACTION_SUPPRESSION_TIMEZONE
                   value: Europe/Berlin
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1444,6 +1572,8 @@ manifest should render application filters:
                   value: ""
                 - name: STEADYBIT_EXTENSION_APPLICATION_FILTER
                   value: 123,456
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1524,6 +1654,8 @@ manifest should render deprecated accesstoken:
                       name: steadybit-extension-appdynamics
                 - name: STEADYBIT_EXTENSION_API_BASE_URL
                   value: ""
+                - name: STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY
+                  value: "false"
               image: ghcr.io/steadybit/extension-appdynamics:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
