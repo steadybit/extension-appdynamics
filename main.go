@@ -30,6 +30,7 @@ import (
 	"github.com/steadybit/extension-kit/extotel"
 	"github.com/steadybit/extension-kit/extruntime"
 	"github.com/steadybit/extension-kit/extsignals"
+	"github.com/steadybit/extension-kit/exttls"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
@@ -78,11 +79,13 @@ func main() {
 func initRestyClient() {
 	if config.Config.AccessToken != "" {
 		extappdynamics.RestyClient = resty.New()
+		extappdynamics.RestyClient.SetTransport(exttls.Transport())
 		extappdynamics.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
 		extappdynamics.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
 		extappdynamics.RestyClient.SetHeader("Content-Type", "application/json")
 
 		extevents.RestyClient = resty.New()
+		extevents.RestyClient.SetTransport(exttls.Transport())
 		extevents.RestyClient.SetBaseURL(strings.TrimRight(config.Config.ApiBaseUrl, "/"))
 		extevents.RestyClient.SetHeader("Authorization", "Bearer "+config.Config.AccessToken)
 		extevents.RestyClient.SetHeader("Content-Type", "application/json")
@@ -96,7 +99,8 @@ func initRestyClient() {
 		}
 		tokenHttpClient := &http.Client{
 			Transport: &basicAuthTransport{
-				base:     http.DefaultTransport,
+				// The oauth2 client reuses this transport as its base, so API calls get the TLS settings too.
+				base:     exttls.Transport(),
 				username: config.Config.ApiClientName,
 				password: config.Config.ApiClientSecret,
 				tokenURL: tokenUrl,

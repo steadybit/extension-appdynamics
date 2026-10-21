@@ -24,6 +24,7 @@ The token must have the following permissions:
 | `STEADYBIT_EXTENSION_APPLICATION_FILTER`                         | appdynamics.applicationFilter             | List of Application IDs that should be reported by the extension. If not set, all applications will be discovered.                                                                                              | no       |         |
 | `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_APPLICATIONS` | discovery.attributes.excludes.application | List of Application attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
 | `STEADYBIT_EXTENSION_DISCOVERY_ATTRIBUTES_EXCLUDES_HEALTH_RULES` | discovery.attributes.excludes.healthRule  | List of Health Rule attributes to exclude from discovery.. Checked by key equality and supporting trailing "*"                                                                                                  | no       |         |
+| `STEADYBIT_EXTENSION_INSECURE_SKIP_VERIFY`                       | appdynamics.insecureSkipVerify            | Skip TLS certificate verification when connecting to AppDynamics. See [Importing your own certificates](#importing-your-own-certificates).                                                                       | no       | false   |
 
 Beyond the settings above, this extension supports the configuration common to all Steadybit
 extensions:
@@ -34,6 +35,44 @@ extensions:
   stop the extension reporting targets you do not want.
 - [Group Matching](https://github.com/steadybit/discovery-kit/blob/main/docs/target-enrichment.md#group-matching) —
   tag discovered targets with a group, so enrichment rules only match within it.
+
+## Importing your own certificates
+
+If your AppDynamics controller is served with a self-signed certificate, or one issued by a private CA, either
+trust the CA (recommended) or skip certificate verification.
+
+### Option 1: Mounting custom certificates
+
+Store the CA certificate (`*.crt`) in a config map:
+
+```shell
+kubectl create configmap -n steadybit-agent appdynamics-self-signed-ca --from-file=./self-signed-ca.crt
+```
+
+Then mount it and add it to the trusted certificate directories:
+
+```yaml
+extraVolumeMounts:
+  - name: extra-certs
+    mountPath: /etc/ssl/extra-certs
+    readOnly: true
+extraVolumes:
+  - name: extra-certs
+    configMap:
+      name: appdynamics-self-signed-ca
+extraEnv:
+  - name: SSL_CERT_DIR
+    value: /etc/ssl/extra-certs:/etc/ssl/certs
+```
+
+### Option 2: Skipping certificate verification
+
+Disables TLS certificate verification. Suitable for testing, not recommended for production.
+
+```yaml
+appdynamics:
+  insecureSkipVerify: true
+```
 
 ## Installation
 
