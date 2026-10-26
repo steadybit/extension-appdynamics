@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.25
+
+- chore(deps): bump action_kit_test to v1.4.13 (#90)
+- chore(deps): bump github.com/KimMachineGun/automemlimit
+- feat: support AppDynamics with self-signed certificates (#89)
+
 ## v1.1.24
 
 - chore(deps): bump golang.org/x/net to v0.61.0
