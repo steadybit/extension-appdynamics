@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.26
+
+- chore(deps): bump k8s.io/apimachinery from 0.37.1 to 0.37.2
+
 ## v1.1.25
 
 - chore(deps): bump action_kit_test to v1.4.13 (#90)
