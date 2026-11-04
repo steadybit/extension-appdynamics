@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- feat: the Health Rule check shows Fail early with the other check settings
+
 ## v1.1.26
 
 - chore(deps): bump k8s.io/apimachinery from 0.37.1 to 0.37.2
