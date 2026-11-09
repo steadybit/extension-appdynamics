@@ -1,7 +1,9 @@
 # Changelog
 
-## Unreleased
+## v1.1.27
 
+- chore(deps): bump golang.org/x/net to v0.62.0
+- feat: show Fail early with the other check settings
 - feat: the Health Rule check shows Fail early with the other check settings
 
 ## v1.1.26
