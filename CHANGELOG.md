@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.28
+
+- chore(deps): bump github.com/steadybit/discovery-kit/go/discovery_kit_sdk
+- chore(deps): bump golang.org/x/oauth2 from 0.37.0 to 0.38.0
+
 ## v1.1.27
 
 - chore(deps): bump golang.org/x/net to v0.62.0
